@@ -1,48 +1,43 @@
 import unittest
 from enum import Enum
+from unittest import suite
+
+
+# Enum OR values together HEARTS or CLUBS or SPADES ...
+# Dictionary/Class AND values together {firstName: "steve", lastName: "shogren", email: ""}
+
 class Suit(Enum):
-     HEARTS = 1
-     CLUBS = 2
-     SPADES = 3
-     DIAMONDS = 4
+    HEARTS = 1
+    CLUBS = 2
+    SPADES = 3
+    DIAMONDS = 4
 
-def makeSentence(string1, string2) :
-    return string1+ " " +string2
+ # face = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
+    #           '8': 8, '9': 9, 'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14}
 
-def parseCard(cardString) :
-    suitString = cardString[1]
-    faceValue = int(cardString[0])
-    suit = None
-    if suitString == "H" :
-        suit = Suit.HEARTS
-    elif suitString == "D" :
-        suit = Suit.DIAMONDS
-    elif suitString == "C" :
-        suit = Suit.CLUBS
-    return (faceValue, suit)
+
+def parseCard(cardString):
+    faceLookup = {'6': 6, '7': 7}
+    suitLookup = {'H': Suit.HEARTS, 'S': Suit.SPADES}
+
+    # faceString = cardString[0]
+    # suitString = cardString[1]
+    return {"face": faceLookup[cardString[0]],
+            "suit": suitLookup[cardString[1]]}
+
 
 class TestStringMethods(unittest.TestCase):
 
-    def test_parseCard1(self):
-        expect = (3, Suit.DIAMONDS)
-        actual = parseCard("3D")
-        self.assertEqual(expect, actual)
+    def test_parseCard_7S(self):
+        actual = parseCard("7S")
+        self.assertEqual(7, actual["face"])
+        self.assertEqual(Suit.SPADES, actual["suit"])
 
-    def test_parseCard(self):
-        expect = (2, Suit.HEARTS)
-        actual = parseCard("2H")
-        self.assertEqual(expect, actual)
+    def test_parseCard_6H(self):
+        actual = parseCard("6H")
+        self.assertEqual(6, actual["face"])
+        self.assertEqual(Suit.HEARTS, actual["suit"])
 
-    def test_parseCard2(self):
-        expect = (9, Suit.CLUBS)
-        actual = parseCard("9C")
-        self.assertEqual(expect, actual)
-
-
-    def test_makeSentence(self):
-        expect = "hello world"
-        actual = makeSentence("hello", "world")
-        self.assertEqual(expect, actual)
 
 if __name__ == '__main__':
     unittest.main()
