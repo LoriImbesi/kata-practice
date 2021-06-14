@@ -18,6 +18,7 @@ class Hand(Enum):
     TWO_PAIR = 2
     THREE_OF_A_KIND = 3
     FLUSH = 4
+    FOUR_OF_A_KIND = 5
 
 # parseCard : string -> dict
 
@@ -44,10 +45,21 @@ def parseCards(cards):
     return (cardDictionaries)
 
 
-# outsideState
+# outsideState - In this practice, is outsideState the hand you're given from the unittest?
 # for loop
 #    store in outsideState
 # use outsideState
+
+def countFaces(cards):
+    faceCounts = {2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0,
+                  9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0}
+    for card in cards:
+        face = card["face"]
+        faceCounts[face] += 1
+
+    return faceCounts
+
+
 def isFlush(cards):
     suitCounts = {Suit.HEARTS: 0, Suit.CLUBS: 0,
                   Suit.SPADES: 0, Suit.DIAMONDS: 0}
@@ -62,33 +74,53 @@ def isFlush(cards):
     return False
 
 
-# cards = [{suit: Spades, face: 4}, {suit: Diamonds, face: 12}]
-def detectHand(cards):
-    faceCounts = {2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
-                  8: 0, 9: 0, 10: 0, 11: 0,  12: 0, 13: 0,  14: 0}
-    # From cards, locates face in dictionary and counts occurrences
-    for card in cards:  # for the current card in all the cards
-        # locate the face on the card
-        face = card["face"]  # (accesses the dict in parseCard?)
-        # in the dict faceCounts, locate "face", increment the count
-        faceCounts[face] += 1
+def isThreeOfAKind(cards):
+    faceCounts = countFaces(cards)
 
-    countOfPairs = 0  # stores count of pairs and starts the count at 0
+    for face, count in faceCounts.items():
+        if (count == 3):
+            return True
+    return False
 
-    # Loop through dictionary and count the pairs
-    for face, count in faceCounts.items():  # loop through all of face and count pairs (k, v) in faceCounts dictionary
-        if (count == 2):  # if the count is equal to 2
-            countOfPairs += 1  # increment the count of pairs
 
-    # Determine if the number of pairs is equal to two or one and return TWO_PAIR or PAIR accordingly
-    if (countOfPairs == 2):  # if the count of pairs is equal to 2
-        return Hand.TWO_PAIR  # return - the hand is TWO_PAIR
-    elif (countOfPairs == 1):  # else if the count of pairs is equal to 1
-        # return - the hand is a PAIR (Do not equate return with print!!)
+def isFourOfAKind(cards):
+    faceCounts = countFaces(cards)
+
+    for face, count in faceCounts.items():
+        if (count == 4):
+            return True
+    return False
+
+
+def detectPair(cards):
+    faceCounts = countFaces(cards)
+
+    countOfPairs = 0
+    for face, count in faceCounts.items():
+        if (count == 2):
+            countOfPairs += 1
+
+    if (countOfPairs == 2):
+        return Hand.TWO_PAIR
+    elif (countOfPairs == 1):
         return Hand.PAIR
+    return None
+
+
+def detectHand(cards):
+    # Question - why is "cards" being passed in the ifs? Is it b/c it's the complete function?
+    possiblePair = detectPair(cards)
+    if (possiblePair):
+        return possiblePair
 
     if (isFlush(cards)):
         return Hand.FLUSH
+
+    if (isThreeOfAKind(cards)):
+        return Hand.THREE_OF_A_KIND
+
+    if (isFourOfAKind(cards)):
+        return Hand.FOUR_OF_A_KIND
 
 
 class TestStringMethods(unittest.TestCase):
@@ -96,6 +128,16 @@ class TestStringMethods(unittest.TestCase):
         cards = parseCards("3D 2D QD AD 4D")
         hand = detectHand(cards)
         self.assertEqual(Hand.FLUSH, hand)
+
+    def test_detectHand_fourOfAKind(self):
+        cards = parseCards("3D 3S 3H 3C 4H")
+        hand = detectHand(cards)
+        self.assertEqual(Hand.FOUR_OF_A_KIND, hand)
+
+    def test_detectHand_threeOfAKind(self):
+        cards = parseCards("3D 3S 3H AC 4H")
+        hand = detectHand(cards)
+        self.assertEqual(Hand.THREE_OF_A_KIND, hand)
 
     def test_detectHand_pair(self):
         cards = parseCards("3D 3S QH AC 4H")
