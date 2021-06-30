@@ -50,20 +50,71 @@ def parseCards(cardStrings):
 # Hand.PAIR
 
 
-def parseHand(cardStrings):
-    cards = parseCards(cardStrings)
+def countFaces(cards):
     countOfFaces = {}
-    print("starting loop")
     for card in cards:
         if card.face in countOfFaces:
             countOfFaces[card.face] += 1
         else:
             countOfFaces[card.face] = 1
+    return countOfFaces
 
-        print(countOfFaces)
-    # do something to check to see if it is a pair
+
+def countSuits(cards):
+    countOfSuits = {}
+    for card in cards:
+        if card.suit in countOfSuits:
+            countOfSuits[card.suit] += 1
+        else:
+            countOfSuits[card.suit] = 1
+    return countOfSuits
+
+
+def countPairs(countOfFaces):
+    countOfPairs = 0
+    for countOfFace in countOfFaces.values():
+        if countOfFace == 2:
+            countOfPairs += 1
+    return countOfPairs
+
+
+def isStraight(cards):
+    faceValues = []
+    for card in cards:
+        faceValues.append(card.face)
+    faceValues.sort()
+    lowestFace = faceValues[0]
+    expectedFaces = list(range(lowestFace, lowestFace+5))
+    return faceValues == expectedFaces
+
+
+def parseHand(cardStrings):
+    cards = parseCards(cardStrings)  # parsing
+
+    isAStraight = isStraight(cards)
+
+    countOfFaces = countFaces(cards)  # question asking
+    countOfSuits = countSuits(cards)
+    countOfPairs = countPairs(countOfFaces)
+
+    # Mapping the answers to the business domain
+    for countOfSuit in countOfSuits.values():
+        if countOfSuit == 5:
+            return Hand.FLUSH
 
     for countOfFace in countOfFaces.values():
-        print(countOfFace)
-        if countOfFace == 2:
-            return Hand.PAIR
+
+        if countOfFace == 3:
+            if countOfPairs == 1:
+                return Hand.FULL_HOUSE
+            return Hand.THREE_OF_A_KIND
+        if countOfFace == 4:
+            return Hand.FOUR_OF_A_KIND
+
+    if countOfPairs == 2:
+        return Hand.TWO_PAIR
+    elif countOfPairs == 1:
+        return Hand.PAIR
+
+    if isAStraight:
+        return Hand.STRAIGHT

@@ -6,9 +6,19 @@ from pokerKata import Suit, parseCard, parseCards, Hand, parseHand
 class TestStringMethods(unittest.TestCase):
 
     def test_parseHand(self):
-        hand = parseHand(["3H", "5D", "4D", "3D", "8S"])
-        self.assertEqual(Hand.PAIR, hand)
-        self.assertEqual(Hand.THREE_OF_A_KIND, hand)
+        # self.assertEqual(Hand.PAIR, parseHand(["3H", "5D", "4D", "3D", "8S"]))
+        # self.assertEqual(Hand.THREE_OF_A_KIND, parseHand(
+        #     ["3H", "3S", "4D", "3D", "8S"]))
+        # self.assertEqual(Hand.FOUR_OF_A_KIND, parseHand(
+        #     ["3H", "3S", "3C", "3D", "8S"]))
+        # self.assertEqual(Hand.FLUSH, parseHand(
+        #     ["7S", "5S", "JS", "3S", "8S"]))
+        # self.assertEqual(Hand.TWO_PAIR, parseHand(
+        #     ["7S", "3H", "7D", "3S", "8S"]))
+        # self.assertEqual(Hand.FULL_HOUSE, parseHand(
+        #     ["7S", "7H", "7D", "8D", "8S"]))
+        self.assertEqual(Hand.STRAIGHT, parseHand(
+            ["3S", "2H", "5D", "4D", "6S"]))
 
     def test_parseCards(self):
         cards = parseCards(["3H", "4D", "5D"])
