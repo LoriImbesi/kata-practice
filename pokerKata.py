@@ -30,91 +30,41 @@ suitLookup = {'H': Suit.HEARTS, 'S': Suit.SPADES,
               'D': Suit.DIAMONDS, 'C': Suit.CLUBS}
 
 
+# parse data (cardString) then match values in dicts and return
+
 def parseCard(cardString):
-    suitLetter = cardString[1]
-    suit = suitLookup[suitLetter]
-    faceLetter = cardString[0]
-    face = faceLookup[faceLetter]
+    cardFace = cardString[0]
+    face = faceLookup[cardFace]
+    cardSuit = cardString[1]
+    suit = suitLookup[cardSuit]
     return Card(suit, face)
+
+# string[](N) -> Card[](N)
 
 
 def parseCards(cardStrings):
-    cards = []
+    # empty "state" list
+    cardsToReturn = []
+
+    # populate "state" list
     for cardString in cardStrings:
         card = parseCard(cardString)
-        cards.append(card)
-    return cards
+        cardsToReturn.append(card)
 
-# ["3D", "4D"]
-# [Card, Card]
-# Hand.PAIR
+    # return "state" list
+    return cardsToReturn
 
+    # def countFaces(cards):
 
-def countFaces(cards):
-    countOfFaces = {}
-    for card in cards:
-        if card.face in countOfFaces:
-            countOfFaces[card.face] += 1
-        else:
-            countOfFaces[card.face] = 1
-    return countOfFaces
+    # def countSuits(cards):
 
+    # def countPairs(countOfFaces):
 
-def countSuits(cards):
-    countOfSuits = {}
-    for card in cards:
-        if card.suit in countOfSuits:
-            countOfSuits[card.suit] += 1
-        else:
-            countOfSuits[card.suit] = 1
-    return countOfSuits
+    # def isStraight(cards):
 
+    # def parseHand(cardStrings):
+    #     # parsing
 
-def countPairs(countOfFaces):
-    countOfPairs = 0
-    for countOfFace in countOfFaces.values():
-        if countOfFace == 2:
-            countOfPairs += 1
-    return countOfPairs
+    #     # question asking
 
-
-def isStraight(cards):
-    faceValues = []
-    for card in cards:
-        faceValues.append(card.face)
-    faceValues.sort()
-    lowestFace = faceValues[0]
-    expectedFaces = list(range(lowestFace, lowestFace+5))
-    return faceValues == expectedFaces
-
-
-def parseHand(cardStrings):
-    cards = parseCards(cardStrings)  # parsing
-
-    isAStraight = isStraight(cards)
-
-    countOfFaces = countFaces(cards)  # question asking
-    countOfSuits = countSuits(cards)
-    countOfPairs = countPairs(countOfFaces)
-
-    # Mapping the answers to the business domain
-    for countOfSuit in countOfSuits.values():
-        if countOfSuit == 5:
-            return Hand.FLUSH
-
-    for countOfFace in countOfFaces.values():
-
-        if countOfFace == 3:
-            if countOfPairs == 1:
-                return Hand.FULL_HOUSE
-            return Hand.THREE_OF_A_KIND
-        if countOfFace == 4:
-            return Hand.FOUR_OF_A_KIND
-
-    if countOfPairs == 2:
-        return Hand.TWO_PAIR
-    elif countOfPairs == 1:
-        return Hand.PAIR
-
-    if isAStraight:
-        return Hand.STRAIGHT
+    #     # Mapping the answers to the business domain
