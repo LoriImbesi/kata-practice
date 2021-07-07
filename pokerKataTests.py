@@ -1,13 +1,13 @@
 import unittest
 from unittest import suite
-from pokerKata import Suit, parseCard, parseCards  # , Hand, parseHand
+from pokerKata import Suit, parseCard, parseCards, Hand, parseHand
 
 
 class TestStringMethods(unittest.TestCase):
 
-    # def test_parseHand(self):
-    #     # self.assertEqual(Hand.PAIR, parseHand(["3H", "5D", "4D", "3D", "8S"]))
-    #     # self.assertEqual(Hand.THREE_OF_A_KIND, parseHand(
+    def test_parseHand(self):
+        self.assertEqual(Hand.PAIR, parseHand(["3H", "5D", "4D", "3D", "8S"]))
+        # self.assertEqual(Hand.THREE_OF_A_KIND, parseHand(
     #     #     ["3H", "3S", "4D", "3D", "8S"]))
     #     # self.assertEqual(Hand.FOUR_OF_A_KIND, parseHand(
     #     #     ["3H", "3S", "3C", "3D", "8S"]))
