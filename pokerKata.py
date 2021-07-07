@@ -54,17 +54,46 @@ def parseCards(cardStrings):
     # return "state" list
     return cardsToReturn
 
-    # def countFaces(cards):
 
-    # def countSuits(cards):
+def countFaces(cards):
+    faceCount = 0
+    face
+    for card in cards:
+        faceCount += 1
+    return faceCount
 
-    # def countPairs(countOfFaces):
+
+def countSuits(cards):
+    suitCount = 0
+    for suit in suitCount:
+        suitCount += 1
+    return suitCount
+
+
+def countPairs(countOfFaces):
+    pairCount = 0
+    for pair in pairCount:
+        pair += 1
+    if pairCount == 2:
+        return Hand.TWO_PAIR
+    elif pairCount == 1:
+        return Hand.PAIR
 
     # def isStraight(cards):
 
-    # def parseHand(cardStrings):
-    #     # parsing
+
+def parseHand(cardStrings):
+    # parsing
+    cards = []
+    # populate "state" list
+    for cardString in cardStrings:
+        card = parseCard(cardString)
+        cards.append(card)
+
+    # return "state" list
+    return cards
 
     #     # question asking
-
+    if countFaces == 3:
+        return Hand.THREE_OF_A_KIND
     #     # Mapping the answers to the business domain
