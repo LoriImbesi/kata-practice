@@ -56,44 +56,57 @@ def parseCards(cardStrings):
 
 
 def countFaces(cards):
-    faceCount = 0
-    face
+    faceCounts = {}
     for card in cards:
-        faceCount += 1
-    return faceCount
+        faceCounts[card.face] = 0
+    for card in cards:
+        faceCounts[card.face] += 1
+   # for card in cards:
+   #     if card.face in faceCounts:
+   #         faceCounts[card.face] = 0
+   #     faceCounts[card.face] += 1
+    return faceCounts
 
 
 def countSuits(cards):
-    suitCount = 0
-    for suit in suitCount:
-        suitCount += 1
+    suitCount = {}
+    for card in cards:
+        suitCount[card.suit] = 0
+    for card in cards:
+        suitCount[card.suit] += 1
     return suitCount
-
-
-def countPairs(countOfFaces):
-    pairCount = 0
-    for pair in pairCount:
-        pair += 1
-    if pairCount == 2:
-        return Hand.TWO_PAIR
-    elif pairCount == 1:
-        return Hand.PAIR
 
     # def isStraight(cards):
 
 
 def parseHand(cardStrings):
     # parsing
-    cards = []
     # populate "state" list
-    for cardString in cardStrings:
-        card = parseCard(cardString)
-        cards.append(card)
+    cards = parseCards(cardStrings)
+
+    countOfFaces = countFaces(cards)
+    numberOfPairs = 0
+    for face in countOfFaces:
+        faceCount = countOfFaces[face]
+        if faceCount == 2:
+            numberOfPairs += 1
+        elif faceCount == 3 and numberOfPairs == 1:
+            return Hand.FULL_HOUSE
+        elif faceCount == 3 and numberOfPairs == 0:
+            return Hand.THREE_OF_A_KIND
+        # elif faceCount == 2:
+        #     numberOfPairs += 1
+        elif faceCount == 4:
+            return Hand.FOUR_OF_A_KIND
+
+    if numberOfPairs == 2:
+        return Hand.TWO_PAIR
+    elif numberOfPairs == 1:
+        return Hand.PAIR
 
     # return "state" list
-    return cards
+    return None
 
     #     # question asking
-    if countFaces == 3:
-        return Hand.THREE_OF_A_KIND
+
     #     # Mapping the answers to the business domain
