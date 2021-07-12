@@ -92,12 +92,10 @@ def parseHand(cardStrings):
             numberOfPairs += 1
         elif faceCount == 3 and numberOfPairs == 1:
             return Hand.FULL_HOUSE
-        elif faceCount == 3 and numberOfPairs == 0:
-            return Hand.THREE_OF_A_KIND
-        # elif faceCount == 2:
-        #     numberOfPairs += 1
         elif faceCount == 4:
             return Hand.FOUR_OF_A_KIND
+        elif faceCount == 3:
+            return Hand.THREE_OF_A_KIND
 
     if numberOfPairs == 2:
         return Hand.TWO_PAIR
