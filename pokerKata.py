@@ -16,6 +16,8 @@ class Hand(Enum):
     FOUR_OF_A_KIND = 5
     FULL_HOUSE = 6
     STRAIGHT = 7
+    STRAIGHT_FLUSH = 8
+    ROYAL_FLUSH = 9
 
 
 class Card:
@@ -61,10 +63,6 @@ def countFaces(cards):
         faceCounts[card.face] = 0
     for card in cards:
         faceCounts[card.face] += 1
-   # for card in cards:
-   #     if card.face in faceCounts:
-   #         faceCounts[card.face] = 0
-   #     faceCounts[card.face] += 1
     return faceCounts
 
 
@@ -76,31 +74,92 @@ def countSuits(cards):
         suitCount[card.suit] += 1
     return suitCount
 
-    # def isStraight(cards):
+
+def isFlush(cards):
+    isAFlush = False
+    countOfSuits = countSuits(cards)
+    for suit in countOfSuits:
+        suitCount = countOfSuits[suit]
+        if suitCount == 5:
+            isAFlush = True
+    return isAFlush
+
+
+def isStraight(cards):
+    isAStraight = False
+    countOfFaces = countFaces(cards)
+    listOfFaces = []
+    listOfFaces = list(countOfFaces.keys())
+    if len(listOfFaces) == 5:
+        listOfFaces.sort()
+        sortedFaces = listOfFaces
+        if sortedFaces[-1] - sortedFaces[0] == 4:
+            isAStraight = True
+    return isAStraight
+
+
+def isStraightFlush(cards):
+    isAStraightFlush = False
+    aFlush = isFlush(cards)
+    aStraight = isStraight(cards)
+    if aFlush and aStraight == True:
+        isAStraightFlush = True
+    return isAStraightFlush
+
+
+def isRoyalFlush(cards):
+    isARoyalFlush = False
+    aStraightFlush = isStraightFlush(cards)
+    if aStraightFlush == True:
+
+
+def countSets(countOfFaces):
+    numberOfQuads = 0
+    numberOfPairs = 0
+    numberOfTriplets = 0
+    for face in countOfFaces:
+        faceCount = countOfFaces[face]
+        if faceCount == 2:
+            numberOfPairs += 1
+        if faceCount == 3:
+            numberOfTriplets += 1
+        if faceCount == 4:
+            numberOfQuads = 1
+    return {'pairs': numberOfPairs, 'triplets': numberOfTriplets, 'quads': numberOfQuads}
 
 
 def parseHand(cardStrings):
     # parsing
     # populate "state" list
     cards = parseCards(cardStrings)
-
     countOfFaces = countFaces(cards)
-    numberOfPairs = 0
-    for face in countOfFaces:
-        faceCount = countOfFaces[face]
-        if faceCount == 2:
-            numberOfPairs += 1
-        elif faceCount == 3 and numberOfPairs == 1:
-            return Hand.FULL_HOUSE
-        elif faceCount == 4:
-            return Hand.FOUR_OF_A_KIND
-        elif faceCount == 3:
-            return Hand.THREE_OF_A_KIND
+    confirmFlush = isFlush(cards)
+    confirmStraight = isStraight(cards)
+    confirmStraightFlush = isStraightFlush(cards)
+    # analyze face pairings
 
+    setCounts = countSets(countOfFaces)
+    numberOfPairs = setCounts['pairs']
+    numberOfTriplets = setCounts['triplets']
+    numberOfQuads = setCounts['quads']
+
+    # determine what to do with analysis
     if numberOfPairs == 2:
         return Hand.TWO_PAIR
+    elif numberOfPairs == 1 and numberOfTriplets == 1:
+        return Hand.FULL_HOUSE
     elif numberOfPairs == 1:
         return Hand.PAIR
+    elif numberOfPairs == 0 and numberOfTriplets == 1:
+        return Hand.THREE_OF_A_KIND
+    elif numberOfQuads == 1:
+        return Hand.FOUR_OF_A_KIND
+    elif confirmStraightFlush == True:
+        return Hand.STRAIGHT_FLUSH
+    elif confirmFlush == True:
+        return Hand.FLUSH
+    elif confirmStraight == True:
+        return Hand.STRAIGHT
 
     # return "state" list
     return None
