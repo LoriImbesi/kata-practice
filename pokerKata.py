@@ -25,6 +25,9 @@ class Card:
         self.suit = suit
         self.face = face
 
+    def toString(self):
+        return 'suit: ' + self.suit + '  face: ' + self.face
+
 
 faceLookup = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
               '8': 8, '9': 9, 'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14}
@@ -110,7 +113,16 @@ def isStraightFlush(cards):
 def isRoyalFlush(cards):
     isARoyalFlush = False
     aStraightFlush = isStraightFlush(cards)
+    countOfFaces = countFaces(cards)
     if aStraightFlush == True:
+        listOfFaces = []
+        listOfFaces = list(countOfFaces.keys())
+        if len(listOfFaces) == 5:
+            listOfFaces.sort()
+            sortedFaces = listOfFaces
+            if sortedFaces[0] == 10 and sortedFaces[-1] == 14:
+                isARoyalFlush = True
+    return isARoyalFlush
 
 
 def countSets(countOfFaces):
@@ -136,6 +148,7 @@ def parseHand(cardStrings):
     confirmFlush = isFlush(cards)
     confirmStraight = isStraight(cards)
     confirmStraightFlush = isStraightFlush(cards)
+    confirmRoyalFlush = isRoyalFlush(cards)
     # analyze face pairings
 
     setCounts = countSets(countOfFaces)
@@ -154,6 +167,8 @@ def parseHand(cardStrings):
         return Hand.THREE_OF_A_KIND
     elif numberOfQuads == 1:
         return Hand.FOUR_OF_A_KIND
+    elif confirmRoyalFlush == True:
+        return Hand.ROYAL_FLUSH
     elif confirmStraightFlush == True:
         return Hand.STRAIGHT_FLUSH
     elif confirmFlush == True:

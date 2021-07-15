@@ -1,29 +1,19 @@
 #! python3
 
 
-def currentScore(player1, player2):
-    # tennisScore = {0: '0', 1: '15', 2: '30', 3: '40'}
+class TennisGame:
+    def __init__(self, player1Score, player2Score):
+        self.player1Score = player1Score
+        self.player2Score = player2Score
 
-    if player1 >= 3 and player2 == player1:
-        return "deuce"
-    if player1 >= 4 and player2 == player1 - 1:
-        return "advantage: player1"
-    if player2 >= 4 and player1 == player2 - 1:
-        return "advantage: player2"
-    if player1 >= 5 and player2 == player1 - 2:
-        return "winner: player1"
-    if player2 >= 5 and player1 == player2 - 2:
-        return "winner: player2"
+    def printCurrentScore(self):
+        scores = {0: "0", 1: "15"}
+        player1Score = scores[self.player1Score]
+        player2Score = scores[self.player2Score]
+        return (player1Score) + " - " + (player2Score)
 
-    return convertScore(player1) + ' - ' + convertScore(player2)
+    def playerOneScored(self):
+        self.player1Score += 1
 
-
-def convertScore(player):
-    if player == 0:
-        return "0"
-    if player == 1:
-        return "15"
-    if player == 2:
-        return "30"
-    if player == 3:
-        return "40"
+    def playerTwoScored(self):
+        self.player2Score += 1
