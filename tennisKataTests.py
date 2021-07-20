@@ -16,12 +16,54 @@ class TestTennisKata(unittest.TestCase):
         currentScore = game.printCurrentScore()
         self.assertEqual("15 - 0", currentScore)
 
+    def test_tennisGamePlayerTwoScores(self):
+        game = TennisGame(0, 0)
+        game.playerTwoScored()
+        currentScore = game.printCurrentScore()
+        self.assertEqual("0 - 15", currentScore)
+
     def test_tennisGameBothScore(self):
         game = TennisGame(0, 0)
         game.playerOneScored()
         game.playerTwoScored()
         currentScore = game.printCurrentScore()
         self.assertEqual("15 - 15", currentScore)
+
+    def test_tennisGameBothScore1(self):
+        game = TennisGame(0, 0)
+        game.playerOneScored()
+        game.playerTwoScored()
+        game.playerTwoScored()
+        currentScore = game.printCurrentScore()
+        self.assertEqual("15 - 30", currentScore)
+
+    def test_tennisGameBothScore3(self):
+        game = TennisGame(3, 3)
+        currentScore = game.printCurrentScore()
+        self.assertEqual("deuce", currentScore)
+
+    def test_tennisGameBothScore3(self):
+        game1 = TennisGame(0, 0)
+        game2 = TennisGame(0, 0)
+
+        game1.player1Score()
+        game2.player2Score()
+
+        currentScoreGame1 = game1.printCurrentScore()
+        currentScoreGame2 = game2.printCurrentScore()
+        self.assertEqual("deuce", currentScoreGame1)
+        self.assertEqual("deuce", currentScoreGame2)
+
+    def test_tennisGameBothScore2(self):
+        game = TennisGame(0, 0)
+        game.playerOneScored()
+        game.playerTwoScored()
+        game.playerOneScored()
+        game.playerTwoScored()
+        game.playerOneScored()
+        game.playerTwoScored()
+        currentScore = game.printCurrentScore()
+        self.assertEqual("deuce", currentScore)
 
     # def test_score(self):
         # self.assertEqual("0 - 0", currentScore(0, 0))
