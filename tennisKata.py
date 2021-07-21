@@ -11,6 +11,10 @@ class TennisGame:
 
         if self.player1Score >= 3 and self.player2Score == self.player1Score:
             return "deuce"
+        if self.player1Score >= 3 and self.player1Score == self.player2Score + 1:
+            return "advantage: player1"
+        if self.player2Score >= 3 and self.player2Score == self.player1Score + 1:
+            return "advantage: player2"
         player1ScoreString = scores[self.player1Score]
         player2ScoreString = scores[self.player2Score]
 
