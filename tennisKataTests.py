@@ -46,13 +46,13 @@ class TestTennisKata(unittest.TestCase):
         game1 = TennisGame(0, 0)
         game2 = TennisGame(0, 0)
 
-        game1.player1Score()
-        game2.player2Score()
+        game1.playerOneScored()
+        game2.playerTwoScored()
 
         currentScoreGame1 = game1.printCurrentScore()
         currentScoreGame2 = game2.printCurrentScore()
-        self.assertEqual("", currentScoreGame1)
-        self.assertEqual("", currentScoreGame2)
+        self.assertEqual("15 - 0", currentScoreGame1)
+        self.assertEqual("0 - 15", currentScoreGame2)
 
     def test_tennisGameBothScore2(self):
         game = TennisGame(0, 0)
