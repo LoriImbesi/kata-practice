@@ -23,25 +23,3 @@ def arabicToRoman(arabicNumber):
             arabicNumber -= 100
     print(romanNumeral)
     return romanNumeral
-
-
-def arabicPlaceValues(arabicNumber):
-
-    numPlaceVal = []
-
-    # break arabic number into place values and pull and
-    # concat values from dict
-
-    # if arabicNum 1 - 3 concat "I"
-    # if arabicNum 4 - 8 concat "IV"
-    # if arabicNum 9,11 - 13 concat "IX"
-    # if arabicNum 14 - 18 concat "IVX"
-    # if arabicNum 19 - 23 concat "IX"
-    # if arabicNum 24 - 28 concat "IVX"
-
-    # 40 introduces "L" 40 = "XL"
-    # 90 introduces "C" 90 = "XC"
-    # 400 introduces "D" 400 = CD
-    # 900 introduces "M"  900 = "CM"
-    # 1001 = "MI"
-    # upper limit: 3000
