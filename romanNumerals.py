@@ -21,5 +21,11 @@ def arabicToRoman(arabicNumber):
         elif arabicNumber < 500:
             romanNumeral = arabicToRomanNums[100]
             arabicNumber -= 100
+        elif arabicNumber < 1000:
+            romanNumeral = arabicToRomanNums[500]
+            arabicNumber -= 500
+        elif arabicNumber < 3000:
+            romanNumeral = arabicToRomanNums[1000]
+            arabicNumber -= 1000
     print(romanNumeral)
     return romanNumeral

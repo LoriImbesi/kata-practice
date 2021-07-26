@@ -18,8 +18,8 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual("XI", arabicToRoman(11))
         self.assertEqual("L", arabicToRoman(50))
         self.assertEqual("C", arabicToRoman(100))
-        # self.assertEqual("D", arabicToRoman(500))
-        # self.assertEqual("M", arabicToRoman(1000))
+        self.assertEqual("D", arabicToRoman(500))
+        self.assertEqual("M", arabicToRoman(1000))
 
 
 if __name__ == '__main__':
