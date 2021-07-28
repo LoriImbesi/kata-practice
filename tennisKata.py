@@ -3,6 +3,7 @@
 
 class TennisGame:
     def __init__(self, player1Score, player2Score):
+        # instance/member variable
         self.player1Score = player1Score
         self.player2Score = player2Score
 
