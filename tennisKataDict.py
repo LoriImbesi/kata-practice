@@ -12,6 +12,11 @@ def printCurrentScore(gameState):
     player1IntegerScore = gameState["player1Score"]
     player2IntegerScore = gameState["player2Score"]
 
+    if player1IntegerScore >= 3 and player1IntegerScore == player2IntegerScore:
+        return "deuce"
+    if player1IntegerScore >= 3 and player1IntegerScore == player2IntegerScore + 1:
+        return "Player1 advantage"
+
     player1 = currentToGameScore[player1IntegerScore]
     player2 = currentToGameScore[player2IntegerScore]
 

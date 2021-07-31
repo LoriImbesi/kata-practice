@@ -41,7 +41,19 @@ class TestTennisKataDict(unittest.TestCase):
         game = playerOneScored(game)
         game = playerTwoScored(game)
         currentScore = printCurrentScore(game)
-        self.assertEqual("40 - 40", currentScore)
+        self.assertEqual("deuce", currentScore)
+
+    def test_tennisGame_4_3(self):
+        game = makeGameState(0, 0)
+        game = playerOneScored(game)
+        game = playerTwoScored(game)
+        game = playerOneScored(game)
+        game = playerTwoScored(game)
+        game = playerOneScored(game)
+        game = playerTwoScored(game)
+        game = playerOneScored(game)
+        currentScore = printCurrentScore(game)
+        self.assertEqual("Player1 advantage", currentScore)
 
 
 if __name__ == '__main__':
