@@ -2,4 +2,4 @@
 
 
 def sayHello(greeting):
-    return "Hello World"
+    return greeting
