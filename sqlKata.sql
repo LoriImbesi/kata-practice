@@ -43,12 +43,14 @@ INSERT INTO plant_types (name) VALUES ('philodendron'),('ficus');
 INSERT INTO pots (name) VALUES ('tan crock');
 INSERT INTO pots (name) VALUES ('green ceramic');
 INSERT INTO fertilizers (name) VALUES ('compost tea'), ('cactus food');
-INSERT INTO plants (plant_type_id, pot_id, fertilizer_id) VALUES (1, 1, 1), (1, 2, 2), (3, 1, 1);
+INSERT INTO plants (plant_type_id, pot_id, fertilizer_id) VALUES (1, 1, 1), (1, 2, 2), (3, 1, 1), (5, 1, 1), (5, 1, 2), (4, 2, 2);
 
 SELECT * FROM plant_types;
 SELECT * FROM pots;
 SELECT * FROM fertilizers;
+
 SELECT * FROM plants
 INNER JOIN plant_types ON plants.plant_type_id = plant_types.plant_type_id
 INNER JOIN pots ON plants.pot_id = pots.pot_id
-INNER JOIN fertilizers ON plants.fertilizer_id = fertilizers.fertilizer_id;
+INNER JOIN fertilizers ON plants.fertilizer_id = fertilizers.fertilizer_id
+WHERE pots.name LIKE '%tan%';
