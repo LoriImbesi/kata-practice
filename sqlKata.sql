@@ -49,8 +49,9 @@ SELECT * FROM plant_types;
 SELECT * FROM pots;
 SELECT * FROM fertilizers;
 
-SELECT * FROM plants
+SELECT plant_types.name, pots.name, plants.last_fertilized
+FROM plants
 INNER JOIN plant_types ON plants.plant_type_id = plant_types.plant_type_id
 INNER JOIN pots ON plants.pot_id = pots.pot_id
 INNER JOIN fertilizers ON plants.fertilizer_id = fertilizers.fertilizer_id
-WHERE pots.name LIKE '%tan%';
+WHERE fertilizers.name LIKE '%tea%';
