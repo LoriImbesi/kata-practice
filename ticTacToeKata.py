@@ -19,6 +19,12 @@
 
 
 def gameBoardStatus(player1, player2):
+    gameState = [["", "", ""],
+                 ["", "", ""],
+                 ["", "", ""]]
+    gameState[0][0]
+    gameState[0][1]
+    gameState[0][2]
 
     gameBoard = {1: "", 2: "", 3: "",
                  4: "", 5: "", 6: "",
