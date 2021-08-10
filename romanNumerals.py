@@ -4,12 +4,8 @@ romanNumsToArabic = {"I": 1, "V": 5, "X": 10,
                      "L": 50, "C": 100, "D": 500, "M": 1000}
 
 
-def romanToArabic(romanNumeral):
-    arabicNumber = 0
-    for romanCharacter in romanNumeral:
-        arabicNumber += romanNumsToArabic[romanCharacter]
-
-    return arabicNumber
+def romanToArabic():
+    return 0
 
 
 def arabicToRoman(arabicNumber):
