@@ -30,6 +30,30 @@ class TestTicTacToeKata(unittest.TestCase):
 
         self.assertEqual("Yes - Player X wins", isGameOver)
 
+    def test_ticTacToe_gameOver_PlayerXWinsCol1(self):
+        board = [["X", "X", "X"],
+                 ["", "", ""],
+                 ["", "", ""]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player X wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerXWinsCol2(self):
+        board = [["", "", ""],
+                 ["X", "X", "X"],
+                 ["", "", ""]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player X wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerXWinsCol3(self):
+        board = [["", "", ""],
+                 ["", "", ""],
+                 ["X", "X", "X"]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player X wins", isGameOver)
+
     def test_ticTacToe_gameOver_PlayerXWins(self):
         board = makeEmptyBoard()
 
