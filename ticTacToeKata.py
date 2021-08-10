@@ -4,8 +4,6 @@
 # state needs to remember what has been played to see who wins or
 # if there's a tie
 
-# if there's a value in that spot then it's taken otherwise, it's
-# an empty string or null?
 
 # winning sets
 # 1,2,3
@@ -17,17 +15,46 @@
 # 1,5,9
 # 3,5,7
 
+# 0 - 0,1,2
+# 1 - 0,1,2
+# 2 - 0,1,2
+# 0,1,2 - 0
+# 0,1,2 - 1
+# 0,1,2 - 2
+# 0,0 1,1 2,2
+# 0,2 1,1 2,0
 
-def gameBoardStatus(player1, player2):
-    gameState = [["", "", ""],
-                 ["", "", ""],
-                 ["", "", ""]]
-    gameState[0][0]
-    gameState[0][1]
-    gameState[0][2]
 
-    gameBoard = {1: "", 2: "", 3: "",
-                 4: "", 5: "", 6: "",
-                 7: "", 8: "", 9: ""}
+# def gameBoardStatus(player1, player2):
+#     gameState = [["", "", ""],
+#                  ["", "", ""],
+#                  ["", "", ""]]
+#
+#     return None
 
-    return gameBoard
+
+def makeEmptyBoard():
+    return [["", "", ""],
+            ["", "", ""],
+            ["", "", ""]]
+
+
+def playerXMove(board, row, col):
+    board[row][col] = "X"
+    return board
+
+
+def playerOMove(board, row, col):
+    board[row][col] = "O"
+    return board
+
+
+def detectGameOver(board):
+    if board[0][0] == "X" and board[1][0] == "X" and board[2][0] == "X":
+        return "Yes - Player X wins"
+    elif board[0][1] == "X" and board[1][1] == "X" and board[2][1] == "X":
+        return "Yes - Player X wins"
+    elif board[0][2] == "X" and board[1][2] == "X" and board[2][2] == "X":
+        return "Yes - Player X wins"
+    else:
+        return "No"
