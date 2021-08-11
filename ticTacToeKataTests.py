@@ -6,6 +6,14 @@ import ticTacToeKata
 
 class TestTicTacToeKata(unittest.TestCase):
 
+    def test_ticTacToe_gameOver_tieNoWinner(self):
+        board = [["X", "O", "O"],
+                 ["O", "X", "X"],
+                 ["X", "O", "O"]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Tie - no winner", isGameOver)
+
     def test_ticTacToe_gameOver_PlayerXWinsRow3(self):
         board = [["", "", "X"],
                  ["", "", "X"],
