@@ -54,6 +54,22 @@ class TestTicTacToeKata(unittest.TestCase):
 
         self.assertEqual("Yes - Player X wins", isGameOver)
 
+    def test_ticTacToe_gameOver_PlayerXWinsTopLeftDiag(self):
+        board = [["X", "", ""],
+                 ["", "X", ""],
+                 ["", "", "X"]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player X wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerXWinsTopRightDiag(self):
+        board = [["", "", "X"],
+                 ["", "X", ""],
+                 ["X", "", ""]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player X wins", isGameOver)
+
     def test_ticTacToe_gameOver_PlayerXWins(self):
         board = makeEmptyBoard()
 
@@ -64,6 +80,81 @@ class TestTicTacToeKata(unittest.TestCase):
         isGameOver = detectGameOver(updatedBoard)
 
         self.assertEqual("Yes - Player X wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerOWinsRow3(self):
+        board = [["", "", "O"],
+                 ["", "", "O"],
+                 ["", "", "O"]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player O wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerOWinsRow2(self):
+        board = [["", "O", ""],
+                 ["", "O", ""],
+                 ["", "O", ""]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player O wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerOWinsRow1(self):
+        board = [["O", "", ""],
+                 ["O", "", ""],
+                 ["O", "", ""]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player O wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerOWinsCol1(self):
+        board = [["O", "O", "O"],
+                 ["", "", ""],
+                 ["", "", ""]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player O wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerOWinsCol2(self):
+        board = [["", "", ""],
+                 ["O", "O", "O"],
+                 ["", "", ""]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player O wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerOWinsCol3(self):
+        board = [["", "", ""],
+                 ["", "", ""],
+                 ["O", "O", "O"]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player O wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerOWinsTopLeftDiag(self):
+        board = [["O", "", ""],
+                 ["", "O", ""],
+                 ["", "", "O"]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player O wins", isGameOver)
+
+    def test_ticTacToe_gameOver_PlayerOWinsTopRightDiag(self):
+        board = [["", "", "O"],
+                 ["", "O", ""],
+                 ["O", "", ""]]
+        isGameOver = detectGameOver(board)
+
+        self.assertEqual("Yes - Player O wins", isGameOver)
+
+    # def test_ticTacToe_gameOver_PlayerOWins(self):
+    #     board = makeEmptyBoard()
+
+    #     updatedBoard = playerOMove(board, 0, 0)
+    #     updatedBoard = playerOMove(board, 1, 0)
+    #     updatedBoard = playerOMove(board, 2, 0)
+
+    #     isGameOver = detectGameOver(updatedBoard)
+
+    #     self.assertEqual("Yes - Player O wins", isGameOver)
 
     def test_ticTacToe_gameOver_no(self):
         board = makeEmptyBoard()
