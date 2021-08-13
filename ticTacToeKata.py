@@ -36,32 +36,27 @@ def playerOMove(board, row, col):
 
 class TicTacToeWinner:
 
-    def __init__(self, board, playerIcon):
+    def __init__(self, board):
         self.board = board
-        self.playerIcon = playerIcon
 
-# example = TicTacToeWinner(board, "X")
-# print(example.board)
-# print(example.playerIcon)
-
-    # def gameWinHoriz(row):
-    #     return (board[row][0] == playerIcon and board[row][1] == playerIcon and board[row][2] == playerIcon)
-
-    def gameWinHoriz(self, row):
-        return (self.board[row][0] == self.playerIcon and self.board[row][1] == self.playerIcon and self.board[row][2] == self.playerIcon)
+    def gameWinHoriz(self):
+        players = ["X", "O"]
+        for row in range(3):
+            for player in players:
+                if self.board[row][0] == player and self.board[row][1] == player and self.board[row][2] == player:
+                    return "Player " + player + " wins"
 
     def gameWinVert(self, col):
         return (self.board[0][col] == self.playerIcon and self.board[1][col] == self.playerIcon and self.board[2][col] == self.playerIcon)
 
     def gameOverForPlayer(self):
+
         gameWinDiagLeft = self.board[0][0] == self.playerIcon and self.board[
             1][1] == self.playerIcon and self.board[2][2] == self.playerIcon
         gameWinDiagRight = self.board[0][2] == self.playerIcon and self.board[
             1][1] == self.playerIcon and self.board[2][0] == self.playerIcon
 
-        if self.gameWinHoriz(row=0) \
-                or self.gameWinHoriz(row=1) \
-                or self.gameWinHoriz(row=2) \
+        if self.gameWinHoriz() \
                 or self.gameWinVert(col=0) \
                 or self.gameWinVert(col=1) \
                 or self.gameWinVert(col=2) \
@@ -71,14 +66,6 @@ class TicTacToeWinner:
 
         else:
             return None
-
-    def tieNoWinnerAlt1(self):
-        for row in range(3):
-            for col in range(3):
-                if self.board[row][col] == "":
-                    return None
-
-        return "Tie - no winner"
 
     def tieNoWinner(self):
         isTie = True
@@ -94,44 +81,12 @@ class TicTacToeWinner:
             return None
 
 
-def gameOverForPlayer(board, playerIcon):
-    def gameWinHoriz(row):
-        return (board[row][0] == playerIcon and board[row][1] == playerIcon and board[row][2] == playerIcon)
-
-    def gameWinVert(col):
-        print(board)
-        return (board[0][col] == playerIcon and board[1][col] == playerIcon and board[2][col] == playerIcon)
-
-    gameWinDiagLeft = board[0][0] == playerIcon and board[1][1] == playerIcon and board[2][2] == playerIcon
-    gameWinDiagRight = board[0][2] == playerIcon and board[1][1] == playerIcon and board[2][0] == playerIcon
-
-    if gameWinHoriz(row=0) \
-            or gameWinHoriz(row=1) \
-            or gameWinHoriz(row=2) \
-            or gameWinVert(col=0) \
-            or gameWinVert(col=1) \
-            or gameWinVert(col=2) \
-            or gameWinDiagLeft \
-            or gameWinDiagRight:
-        return "Yes - Player " + playerIcon + " wins"
-
-    else:
-        return None
-
-
 def detectGameOver(board):
+    playerWins = TicTacToeWinner(board).gameOverForPlayer()
+    tieNoWinner = TicTacToeWinner(board).tieNoWinner()
 
-    playerXWins = TicTacToeWinner(board, "X").gameOverForPlayer()
-    playerOWins = TicTacToeWinner(board, "O").gameOverForPlayer()
-    tieNoWinner = TicTacToeWinner(board, "").tieNoWinner()
-
-    #playerXWins = gameOverForPlayer(board, "X")
-    #playerOWins = gameOverForPlayer(board, "O")
-
-    if playerXWins:
-        return playerXWins
-    elif playerOWins:
-        return playerOWins
+    if playerWins:
+        return playerWins
     elif tieNoWinner:
         return tieNoWinner
     else:
