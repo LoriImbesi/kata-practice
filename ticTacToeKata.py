@@ -47,7 +47,11 @@ class TicTacToeWinner:
                     return "Player " + player + " wins"
 
     def gameWinVert(self, col):
-        return (self.board[0][col] == self.playerIcon and self.board[1][col] == self.playerIcon and self.board[2][col] == self.playerIcon)
+        players = ["X", "O"]
+        for col in range(3):
+            for player in players:
+                if self.board[0][col] == player and self.board[1][col] == player and self.board[2][col] == player:
+                    return "Player " + player + " wins"
 
     def gameOverForPlayer(self):
 
