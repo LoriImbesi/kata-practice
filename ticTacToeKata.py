@@ -46,7 +46,7 @@ class TicTacToeWinner:
                 if self.board[row][0] == player and self.board[row][1] == player and self.board[row][2] == player:
                     return "Player " + player + " wins"
 
-    def gameWinVert(self, col):
+    def gameWinVert(self):
         players = ["X", "O"]
         for col in range(3):
             for player in players:
@@ -54,22 +54,27 @@ class TicTacToeWinner:
                     return "Player " + player + " wins"
 
     def gameOverForPlayer(self):
+        player = ["X", "O"]
 
-        gameWinDiagLeft = self.board[0][0] == self.playerIcon and self.board[
-            1][1] == self.playerIcon and self.board[2][2] == self.playerIcon
-        gameWinDiagRight = self.board[0][2] == self.playerIcon and self.board[
-            1][1] == self.playerIcon and self.board[2][0] == self.playerIcon
+        if self.board[0][0] == player and self.board[1][1] == player and \
+                self.board[2][2] == player:
+            return "Player " + player + " wins"
 
-        if self.gameWinHoriz() \
-                or self.gameWinVert(col=0) \
-                or self.gameWinVert(col=1) \
-                or self.gameWinVert(col=2) \
-                or gameWinDiagLeft \
-                or gameWinDiagRight:
-            return "Yes - Player " + self.playerIcon + " wins"
+        # gameWinDiagLeft = self.board[0][0] == player and self.board[
+        #     1][1] == player and self.board[2][2] == player
+        gameWinDiagRight = self.board[0][2] == player and self.board[
+            1][1] == player and self.board[2][0] == player
 
-        else:
-            return None
+        # if self.gameWinHoriz() \
+        #         or self.gameWinVert(col=0) \
+        #         or self.gameWinVert(col=1) \
+        #         or self.gameWinVert(col=2) \
+        #         or gameWinDiagLeft \
+        #         or gameWinDiagRight:
+        #     return "Yes - Player " + player + " wins"
+
+        # else:
+        #     return None
 
     def tieNoWinner(self):
         isTie = True
