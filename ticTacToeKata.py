@@ -1,4 +1,5 @@
 #! python3
+from enum import Enum
 
 # row 0 - 0,1,2
 # 1 - 0,1,2
@@ -34,6 +35,12 @@ def playerOMove(board, row, col):
     return board
 
 
+class PossibleWinner(Enum):
+    PlayerXWins = 1
+    PlayerOWins = 2
+    Neither = 3
+
+
 class TicTacToeWinner:
 
     def __init__(self, board):
@@ -44,37 +51,59 @@ class TicTacToeWinner:
         for row in range(3):
             for player in players:
                 if self.board[row][0] == player and self.board[row][1] == player and self.board[row][2] == player:
-                    return "Player " + player + " wins"
+                    if player == "X":
+                        return PossibleWinner.PlayerXWins
+                    else:
+                        return PossibleWinner.PlayerOWins
+
+        return PossibleWinner.Neither
 
     def gameWinVert(self):
         players = ["X", "O"]
         for col in range(3):
             for player in players:
                 if self.board[0][col] == player and self.board[1][col] == player and self.board[2][col] == player:
-                    return "Player " + player + " wins"
+                    if player == "X":
+                        return PossibleWinner.PlayerXWins
+                    else:
+                        return PossibleWinner.PlayerOWins
+
+        return PossibleWinner.Neither
 
     def gameOverForPlayer(self):
-        player = ["X", "O"]
+        players = ["X", "O"]
+        for player in players:
+            if self.board[0][0] == player and self.board[1][1] == player and \
+                    self.board[2][2] == player:
+                if player == "X":
+                    return PossibleWinner.PlayerXWins
+                else:
+                    return PossibleWinner.PlayerOWins
+            if self.board[0][2] == player and self.board[1][1] == player and \
+                    self.board[2][0] == player:
+                if player == "X":
+                    return PossibleWinner.PlayerXWins
+                else:
+                    return PossibleWinner.PlayerOWins
 
-        if self.board[0][0] == player and self.board[1][1] == player and \
-                self.board[2][2] == player:
-            return "Player " + player + " wins"
+        gameHorizWon = self.gameWinHoriz()
+        if gameHorizWon != PossibleWinner.Neither:
+            return gameHorizWon
+        gameVertWon = self.gameWinVert()
+        if gameVertWon != PossibleWinner.Neither:
+            return gameVertWon
 
-        # gameWinDiagLeft = self.board[0][0] == player and self.board[
-        #     1][1] == player and self.board[2][2] == player
-        gameWinDiagRight = self.board[0][2] == player and self.board[
-            1][1] == player and self.board[2][0] == player
+        return PossibleWinner.Neither
 
-        # if self.gameWinHoriz() \
-        #         or self.gameWinVert(col=0) \
-        #         or self.gameWinVert(col=1) \
-        #         or self.gameWinVert(col=2) \
-        #         or gameWinDiagLeft \
-        #         or gameWinDiagRight:
-        #     return "Yes - Player " + player + " wins"
+    def whoIsPossibleWinner(playerIcon):
+        if playerIcon == "X":
+            return PossibleWinner.PlayerXWins
+        if playerIcon == "O":
+            return PossibleWinner.PlayerOWins
 
-        # else:
-        #     return None
+    # how many possible outputs does this have?
+    # what does it have now?
+    # what could it be simplified as?
 
     def tieNoWinner(self):
         isTie = True
@@ -94,8 +123,10 @@ def detectGameOver(board):
     playerWins = TicTacToeWinner(board).gameOverForPlayer()
     tieNoWinner = TicTacToeWinner(board).tieNoWinner()
 
-    if playerWins:
-        return playerWins
+    if playerWins == PossibleWinner.PlayerXWins:
+        return "Yes - Player X wins"
+    elif playerWins == PossibleWinner.PlayerOWins:
+        return "Yes - Player O wins"
     elif tieNoWinner:
         return tieNoWinner
     else:
