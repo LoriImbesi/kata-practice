@@ -1,6 +1,6 @@
 import unittest
 from unittest import suite
-from pokerKata import Suit, parseCard, parseCards, Hand, parseHand, countFaces, Card, countSuits
+from pokerKata2 import parseCard, Card, Suit, parseCards, faceCounts, suitCounts, parseHand, Hand
 
 
 class TestStringMethods(unittest.TestCase):
@@ -24,23 +24,23 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(Hand.ROYAL_FLUSH, parseHand(
             ["AD", "KD", "TD", "JD", "QD"]))
 
-    def test_countFaces(self):
+    def test_faceCounts(self):
         cards = [Card(Suit.HEARTS, 3),
                  Card(Suit.SPADES, 3),
                  Card(Suit.DIAMONDS, 3),
                  Card(Suit.HEARTS, 8),
                  Card(Suit.HEARTS, 4)]
-        actual = countFaces(cards)
+        actual = faceCounts(cards)
         expected = {3: 3, 4: 1, 8: 1}
         self.assertEqual(expected, actual)
 
-    def test_countSuits(self):
+    def test_suitCounts(self):
         cards = [Card(Suit.HEARTS, 3),
                  Card(Suit.SPADES, 3),
                  Card(Suit.DIAMONDS, 3),
                  Card(Suit.HEARTS, 8),
                  Card(Suit.HEARTS, 4)]
-        actual = countSuits(cards)
+        actual = suitCounts(cards)
         expected = {Suit.HEARTS: 3, Suit.SPADES: 1,
                     Suit.DIAMONDS: 1}
         self.assertEqual(expected, actual)
