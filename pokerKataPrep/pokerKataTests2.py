@@ -41,8 +41,7 @@ class TestStringMethods(unittest.TestCase):
                  Card(Suit.HEARTS, 8),
                  Card(Suit.HEARTS, 4)]
         actual = suitCounts(cards)
-        expected = {Suit.HEARTS: 3, Suit.SPADES: 1,
-                    Suit.DIAMONDS: 1}
+        expected = 3
         self.assertEqual(expected, actual)
 
     def test_split(self):
@@ -68,6 +67,10 @@ class TestStringMethods(unittest.TestCase):
         card = parseCard("5S")
         self.assertEqual(Suit.SPADES, card.suit)
         self.assertEqual(5, card.face)
+
+        card = parseCard("TS")
+        self.assertEqual(Suit.SPADES, card.suit)
+        self.assertEqual(10, card.face)
 
 
 if __name__ == '__main__':
