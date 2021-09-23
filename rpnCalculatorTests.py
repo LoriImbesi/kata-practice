@@ -34,6 +34,17 @@ class TestStringMethods(unittest.TestCase):
         actual = rpnCalculate(input)
         self.assertEqual(actual, 3)
 
+    def test_moreThanTwoOperations(self):
+        # "3 5 8 * 7 + *"
+        # "3 40 7 + *"
+        # "3 47 *"
+
+        # E E O
+        # (E ((E E O) E O) O)
+        input = "3 5 8 * 7 + *"
+        actual = rpnCalculate(input)
+        self.assertEqual(actual, 141)
+
 
 if __name__ == '__main__':
     unittest.main()
