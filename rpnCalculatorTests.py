@@ -1,9 +1,9 @@
 import unittest
 from unittest import suite
-from rpnCalculator import rpnCalculate
+from rpnCalculator import rpnCalculate, replaceWithResult
 
 
-class TestStringMethods(unittest.TestCase):
+class TestRpnCalculator(unittest.TestCase):
 
     # "20 5 /" => 4
     # "20 5 *" => 120
@@ -33,6 +33,20 @@ class TestStringMethods(unittest.TestCase):
         input = "4 2 + 3 -"
         actual = rpnCalculate(input)
         self.assertEqual(actual, 3)
+
+    def test_replaceWithResult(self):
+        input = ["3", "5",  "8",  "*", "7", "+", "*"]
+        result = 40
+        e1Index = 1
+        actual = replaceWithResult(input, result, e1Index)
+        self.assertEqual(actual, ["3", "40", "7", "+", "*"])
+
+    def test_replaceWithResult2(self):
+        input = ["3", "5", "*"]
+        result = 15
+        e1Index = 0
+        actual = replaceWithResult(input, result, e1Index)
+        self.assertEqual(actual, ["15"])
 
     def test_moreThanTwoOperations(self):
         # "3 5 8 * 7 + *"

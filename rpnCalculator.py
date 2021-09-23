@@ -44,21 +44,27 @@ def rpnCalculateList(stringValues):
             result = calculate(e1, e2, string)
             if len(stringValues) > 3:
                 # ["4",  "2", "+", "3", "-"]
-                # ["6", "3", "-"]
                 # ["3", "-"]
 
                 # ["3", "5", "8", "*", "7", "+", "*"]
+                # 3, 7, +, *
                 # 3, 40, 7, +, *
                 # 3, 47, *
                 # 141
 
                 uncalculatedValues = stringValues[3:]
-                print(uncalculatedValues)
+                print(uncalculatedValues[0])
                 uncalculatedValues.insert(0, str(result))  # ["6", "3", "-"]
                 print(uncalculatedValues)
                 return rpnCalculateList(uncalculatedValues)
             else:
                 return result
+
+
+def replaceWithResult(input, result, e1Index):
+    del input[e1Index: e1Index + 3]
+    input.insert(e1Index, str(result))
+    return input
 
 
 def rpnCalculate(input):
