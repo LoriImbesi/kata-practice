@@ -1,5 +1,5 @@
 import unittest
-from pokerKata import Suit, parseCard
+from pokerKata import Suit, parseCard, parseCards
 
 
 class TestStringMethods(unittest.TestCase):
@@ -15,6 +15,21 @@ class TestStringMethods(unittest.TestCase):
         card = "2H"
         parsedCard = parseCard(card)
         self.assertEqual(parsedCard, (2, Suit.HEARTS))
+
+    def test_parseCard2(self):
+        card = "KD"
+        parsedCard = parseCard(card)
+        self.assertEqual(parsedCard, (13, Suit.DIAMONDS))
+
+    # ("3D", "5S") -> List of tuples [(3, Suit.DIAMONDS),(5, Suit.SPADES)]
+    def test_parseCards(self):
+        cards = ("2H", "3D", "5S", "9C", "KD")
+        parsedCards = parseCards(cards)
+        self.assertEqual(parsedCards[0], (2, Suit.HEARTS))
+        self.assertEqual(parsedCards[1], (3, Suit.DIAMONDS))
+        self.assertEqual(parsedCards[2], (5, Suit.SPADES))
+        self.assertEqual(parsedCards[3], (9, Suit.CLUBS))
+        self.assertEqual(parsedCards[4], (13, Suit.DIAMONDS))
 
 
 if __name__ == '__main__':
