@@ -1,5 +1,5 @@
 import unittest
-from pokerKata import Suit, parseCard, parseCards
+from pokerKata import Suit, parseCard, parseCards, numberOfPairs, isThreeOfAKind, isAStraight, isAFlush
 
 
 class TestStringMethods(unittest.TestCase):
@@ -30,6 +30,57 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(parsedCards[2], (5, Suit.SPADES))
         self.assertEqual(parsedCards[3], (9, Suit.CLUBS))
         self.assertEqual(parsedCards[4], (13, Suit.DIAMONDS))
+
+    # List of tuples -> Integer
+    def test_onePair(self):
+        parsedCards = [(4, Suit.HEARTS), (3, Suit.DIAMONDS),
+                       (3, Suit.SPADES), (9, Suit.CLUBS),
+                       (13, Suit.DIAMONDS)]
+        detectPair = numberOfPairs(parsedCards)
+        self.assertEqual(detectPair, 1)
+
+    def test_twoPair(self):
+        parsedCards = [(9, Suit.HEARTS), (3, Suit.DIAMONDS),
+                       (3, Suit.SPADES), (9, Suit.CLUBS),
+                       (13, Suit.DIAMONDS)]
+        detectPair = numberOfPairs(parsedCards)
+        self.assertEqual(detectPair, 2)
+
+    def test_noPair(self):
+        parsedCards = [(2, Suit.HEARTS), (3, Suit.DIAMONDS),
+                       (5, Suit.SPADES), (9, Suit.CLUBS),
+                       (13, Suit.DIAMONDS)]
+        detectPair = numberOfPairs(parsedCards)
+        self.assertEqual(detectPair, 0)
+
+    def test_fourKind(self):
+        parsedCards = [(2, Suit.HEARTS), (2, Suit.DIAMONDS),
+                       (2, Suit.SPADES), (2, Suit.CLUBS),
+                       (13, Suit.DIAMONDS)]
+        detectPair = numberOfPairs(parsedCards)
+        self.assertEqual(detectPair, 0)
+
+# List of tuples -> Bool
+    def test_threeKind(self):
+        parsedCards = [(4, Suit.HEARTS), (4, Suit.DIAMONDS),
+                       (4, Suit.SPADES), (2, Suit.CLUBS),
+                       (13, Suit.DIAMONDS)]
+        threeKind = isThreeOfAKind(parsedCards)
+        self.assertEqual(threeKind, True)
+
+    def test_isStraight(self):
+        parsedCards = [(4, Suit.HEARTS), (5, Suit.DIAMONDS),
+                       (6, Suit.SPADES), (7, Suit.CLUBS),
+                       (8, Suit.DIAMONDS)]
+        isStraight = isAStraight(parsedCards)
+        self.assertEqual(isStraight, True)
+
+    def test_isFlush(self):
+        parsedCards = [(4, Suit.DIAMONDS), (5, Suit.DIAMONDS),
+                       (6, Suit.DIAMONDS), (7, Suit.DIAMONDS),
+                       (10, Suit.DIAMONDS)]
+        isFlush = isAFlush(parsedCards)
+        self.assertEqual(isFlush, True)
 
 
 if __name__ == '__main__':

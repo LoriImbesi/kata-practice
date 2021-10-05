@@ -1,4 +1,6 @@
-from enum import Enum
+from enum import Enum, unique
+
+from pokerKataPrep.pokerKata2 import faceCounts
 
 
 class Suit(Enum):
@@ -25,8 +27,66 @@ def parseCard(card):
 
 
 def parseCards(cards):
-    parsedCardsList = []
+    parsedCardList = []
     for card in cards:
-        parsedCard = parseCard(card)
-        parsedCardsList.append(parsedCard)
-    return (parsedCardsList)
+        parsedCards = parseCard(card)
+        parsedCardList.append(parsedCards)
+    return parsedCardList
+
+
+def countOfFaces(parsedCards):
+    faceCounts = {}
+    for parsedCard in parsedCards:
+        face = parsedCard[0]
+        if face in faceCounts:
+            faceCounts[face] += 1
+        else:
+            faceCounts[face] = 1
+    return faceCounts
+
+# def countOfSuits(parsedCards):
+#     suitCounts = {}
+#     for parsedCard in parsedCards:
+#         suit = parsedCard[1]
+#         for suit in suitCounts:
+
+
+def numberOfPairs(parsedCards):
+    faceCounts = countOfFaces(parsedCards)
+    uniqueFaces = len(faceCounts)
+    if uniqueFaces == 5:
+        return 0
+    for face in faceCounts:
+        if faceCounts[face] == 2:
+            if uniqueFaces == 4:
+                return 1
+            elif uniqueFaces == 3:
+                return 2
+
+    return 0
+
+
+def isThreeOfAKind(parsedCards):
+    faceCounts = countOfFaces(parsedCards)
+
+    for face in faceCounts:
+        if faceCounts[face] == 3:
+            return True
+
+
+def isAStraight(parsedCards):
+    faceCounts = countOfFaces(parsedCards)
+    faces = faceCounts.keys()
+    if max(faces) - min(faces) == 4:
+        return True
+
+
+def isAFlush(parsedCards):
+    firstSuit = parsedCards[0][1]
+
+    for parsedCard in parsedCards:
+        suit = parsedCard[1]
+        if firstSuit != suit:
+            return False
+
+    return True
