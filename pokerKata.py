@@ -42,16 +42,22 @@ def splitPlayerHandInput(playerHands):
 
 def rankOfHand(playerHands):
     handStrings = splitPlayerHandInput(playerHands)
-    blackHand = parseHand(handStrings["black"])
-    whiteHand = parseHand(handStrings["white"])
-
-    if blackHand.value > whiteHand.value:
+    (blackHand, blackFaceCards) = parseHand(handStrings["black"])
+    (whiteHand, whiteFaceCards) = parseHand(handStrings["white"])
+    if blackHand.value == whiteHand.value:
+        return tieBreaker(blackHand, blackFaceCards[0], whiteFaceCards[0])
+    elif blackHand.value > whiteHand.value:
         winningHand = specifyWinningHand(blackHand)
         return ("Black wins. - with " + winningHand)
     else:
         winningHand = specifyWinningHand(whiteHand)
         return ("White wins. - with " + winningHand)
 
+
+#            1.7. rankOfHand
+#  2. 6. parseHand          -  8. tieBreaker
+#  3.5. numberOfPairs
+#  4. countOfFaces
 
 def specifyWinningHand(winningHandEnum):
     winningHand = str(winningHandEnum)
@@ -60,28 +66,36 @@ def specifyWinningHand(winningHandEnum):
     return nameOfHand
 
 
+def tieBreaker(handType, blackHandCard, whiteHandCard):
+    handRank = specifyWinningHand(handType)
+    if blackHandCard > whiteHandCard:
+        return ("Black wins. - with " + handRank + ": " + str(blackHandCard) + " over " + str(whiteHandCard))
+    else:
+        return ("White wins. - with " + handRank + ": " + str(whiteHandCard) + " over " + str(blackHandCard))
+
+
 def parseHand(cardStrings):
     parsedCards = parseCards(cardStrings)
-    numOfPairs = numberOfPairs(parsedCards)
+    (numOfPairs, faceCards) = numberOfPairs(parsedCards)
     threeOrFourOfAKind = handOfAKind(parsedCards)
     isStraight = isAStraight(parsedCards)
     isFlush = isAFlush(parsedCards)
 
     if isFlush == True and isStraight == True:
-        return Hand.STRAIGHT_FLUSH
+        return (Hand.STRAIGHT_FLUSH, [])
     if threeOrFourOfAKind == Hand.THREE_OF_A_KIND and numOfPairs == 1:
-        return Hand.FULL_HOUSE
+        return (Hand.FULL_HOUSE, [])
     if isFlush == True:
-        return Hand.FLUSH
+        return (Hand.FLUSH, [])
     if isStraight == True:
-        return Hand.STRAIGHT
+        return (Hand.STRAIGHT, [])
     if threeOrFourOfAKind:
-        return threeOrFourOfAKind
+        return (threeOrFourOfAKind, [])
     if numOfPairs == 1:
-        return Hand.PAIR
+        return (Hand.PAIR, faceCards)
     if numOfPairs == 2:
-        return Hand.TWO_PAIR
-    return Hand.HIGH_CARD
+        return (Hand.TWO_PAIR, [])
+    return (Hand.HIGH_CARD, [])
 
 
 def parseCard(card):
@@ -115,15 +129,15 @@ def numberOfPairs(parsedCards):
     faceCounts = countOfFaces(parsedCards)
     uniqueFaces = len(faceCounts)
     if uniqueFaces == 5:
-        return 0
+        return (0, [])
     for face in faceCounts:
         if faceCounts[face] == 2:
             if uniqueFaces == 4 or uniqueFaces == 2:
-                return 1
+                return (1, [face])
             elif uniqueFaces == 3:
-                return 2
+                return (2, [])  # todo finish two pair
 
-    return 0
+    return (0, [])
 
 
 def handOfAKind(parsedCards):

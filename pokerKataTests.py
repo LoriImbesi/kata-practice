@@ -1,5 +1,5 @@
 import unittest
-from pokerKata import Suit, Hand, handOfAKind, parseCard, parseCards, numberOfPairs, handOfAKind, isAStraight, isAFlush, parseHand, rankOfHand, splitPlayerHandInput, specifyWinningHand
+from pokerKata import Suit, Hand, handOfAKind, parseCard, parseCards, numberOfPairs, handOfAKind, isAStraight, isAFlush, parseHand, rankOfHand, splitPlayerHandInput, specifyWinningHand, tieBreaker
 
 
 class TestStringMethods(unittest.TestCase):
@@ -36,47 +36,47 @@ class TestStringMethods(unittest.TestCase):
     def test_parseHand_isPair(self):
         cardStrings = ("3H", "3D", "5S", "9C", "KD")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, Hand.PAIR)
+        self.assertEqual(parsedHand, (Hand.PAIR, [3]))
 
     def test_parseHand_isTwoPair(self):
         cardStrings = ("3H", "3D", "9S", "9C", "KD")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, Hand.TWO_PAIR)
+        self.assertEqual(parsedHand, (Hand.TWO_PAIR, []))
 
     def test_parseHand_isHighCard(self):
         cardStrings = ("2H", "3D", "9S", "8C", "QD")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, Hand.HIGH_CARD)
+        self.assertEqual(parsedHand, (Hand.HIGH_CARD, []))
 
     def test_parseHand_isThreeOfAKind(self):
         cardStrings = ("3H", "3D", "3S", "8C", "QD")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, Hand.THREE_OF_A_KIND)
+        self.assertEqual(parsedHand, (Hand.THREE_OF_A_KIND, []))
 
     def test_parseHand_isFourOfAKind(self):
         cardStrings = ("4H", "4D", "3S", "4C", "4S")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, Hand.FOUR_OF_A_KIND)
+        self.assertEqual(parsedHand, (Hand.FOUR_OF_A_KIND, []))
 
     def test_parseHand_isAStraight(self):
         cardStrings = ("3H", "4D", "5S", "6C", "7D")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, Hand.STRAIGHT)
+        self.assertEqual(parsedHand, (Hand.STRAIGHT, []))
 
     def test_parseHand_isAFlush(self):
         cardStrings = ("3H", "4H", "9H", "6H", "7H")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, Hand.FLUSH)
+        self.assertEqual(parsedHand, (Hand.FLUSH, []))
 
     def test_parseHand_isAStraightFlush(self):
         cardStrings = ("3H", "4H", "5H", "6H", "7H")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, Hand.STRAIGHT_FLUSH)
+        self.assertEqual(parsedHand, (Hand.STRAIGHT_FLUSH, []))
 
     def test_parseHand_isAFullHouse(self):
         cardStrings = ("3H", "3S", "3C", "JD", "JS")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, Hand.FULL_HOUSE)
+        self.assertEqual(parsedHand, (Hand.FULL_HOUSE, []))
 
     # List of tuples -> Integer
 
@@ -85,35 +85,36 @@ class TestStringMethods(unittest.TestCase):
                        (3, Suit.SPADES), (9, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
         detectPair = numberOfPairs(parsedCards)
-        self.assertEqual(detectPair, 1)
+        self.assertEqual(detectPair, (1, [3]))
 
     def test_numberOfPairs_onePairWithThreeOfAKind(self):
         parsedCards = [(3, Suit.HEARTS), (3, Suit.CLUBS),
                        (3, Suit.SPADES), (11, Suit.DIAMONDS),
                        (11, Suit.SPADES)]
         detectPair = numberOfPairs(parsedCards)
-        self.assertEqual(detectPair, 1)
+        self.assertEqual(detectPair, (1, [11]))
 
     def test_numberOfPairs_twoPair(self):
         parsedCards = [(9, Suit.HEARTS), (3, Suit.DIAMONDS),
                        (3, Suit.SPADES), (9, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
         detectPair = numberOfPairs(parsedCards)
-        self.assertEqual(detectPair, 2)
+        # todo finish
+        self.assertEqual(detectPair, (2, []))
 
     def test_numberOfPairs_highCardFindsNoPairs(self):
         parsedCards = [(2, Suit.HEARTS), (3, Suit.DIAMONDS),
                        (5, Suit.SPADES), (9, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
         detectPair = numberOfPairs(parsedCards)
-        self.assertEqual(detectPair, 0)
+        self.assertEqual(detectPair, (0, []))
 
     def test_numberOfPairs_fourOfAKindDoesntCountAsAPair(self):
         parsedCards = [(2, Suit.HEARTS), (2, Suit.DIAMONDS),
                        (2, Suit.SPADES), (2, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
         detectPair = numberOfPairs(parsedCards)
-        self.assertEqual(detectPair, 0)
+        self.assertEqual(detectPair, (0, []))
 
 # List of tuples -> Bool
     def test_isAStraight(self):
@@ -156,15 +157,15 @@ class TestStringMethods(unittest.TestCase):
         handRank = rankOfHand(playerHands)
         self.assertEqual(handRank, "White wins. - with PAIR")
 
+    def test_rankOfHand_tie(self):
+        playerHands = "Black: 9H 3D 5S 9C KD  White: 2C 2H 4S 8C AH"
+        handRank = rankOfHand(playerHands)
+        self.assertEqual(handRank, "Black wins. - with PAIR: 9 over 2")
+
     def test_rankOfHand_FULL_HOUSE(self):
         playerHands = "Black: 2H 4S 4C 2D 4H  White: 2S 8S AS QS 3S"
         handRank = rankOfHand(playerHands)
         self.assertEqual(handRank, "Black wins. - with FULL_HOUSE")
-
-    def test_rankOfHand_HIGH_CARD(self):
-        playerHands = "Black: 2H 3D 5S 9C KD  White: 2C 3H 4S 5C 6H"
-        handRank = rankOfHand(playerHands)
-        self.assertEqual(handRank, "White wins. - with STRAIGHT")
 
     def test_splitPlayerHandInput(self):
         playerHands = "Black: 2H 3D 5S 9C KD  White: 2C 3H 4S 8C AH"
@@ -176,6 +177,27 @@ class TestStringMethods(unittest.TestCase):
         winningHandEnum = Hand.PAIR
         winningHand = specifyWinningHand(winningHandEnum)
         self.assertEqual(winningHand, "PAIR")
+
+    def test_tieBreaker(self):
+        handType = Hand.PAIR
+        blackHandCard = 4
+        whiteHandCard = 2
+        winnerOfTie = tieBreaker(handType, blackHandCard, whiteHandCard)
+        self.assertEqual(winnerOfTie, "Black wins. - with PAIR: 4 over 2")
+
+    def test_tieBreaker_blackWinsDifferentFaceValues(self):
+        handType = Hand.PAIR
+        blackHandCard = 8
+        whiteHandCard = 7
+        winnerOfTie = tieBreaker(handType, blackHandCard, whiteHandCard)
+        self.assertEqual(winnerOfTie, "Black wins. - with PAIR: 8 over 7")
+
+    def test_tieBreaker2(self):
+        handType = Hand.PAIR
+        blackHandCard = 4
+        whiteHandCard = 9
+        winnerOfTie = tieBreaker(handType, blackHandCard, whiteHandCard)
+        self.assertEqual(winnerOfTie, "White wins. - with PAIR: 9 over 4")
 
 
 if __name__ == '__main__':
