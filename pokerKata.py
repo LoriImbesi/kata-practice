@@ -44,15 +44,20 @@ def rankOfHand(playerHands):
     handStrings = splitPlayerHandInput(playerHands)
     blackHand = parseHand(handStrings["black"])
     whiteHand = parseHand(handStrings["white"])
+
     if blackHand.value > whiteHand.value:
-        return "Black wins"
+        winningHand = specifyWinningHand(blackHand)
+        return ("Black wins. - with " + winningHand)
     else:
-        return "White wins"
+        winningHand = specifyWinningHand(whiteHand)
+        return ("White wins. - with " + winningHand)
 
 
 def specifyWinningHand(winningHandEnum):
     winningHand = str(winningHandEnum)
-    print(winningHand)
+    hand = winningHand.split(".")
+    nameOfHand = hand[1]
+    return nameOfHand
 
 
 def parseHand(cardStrings):

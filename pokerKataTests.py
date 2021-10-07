@@ -154,7 +154,17 @@ class TestStringMethods(unittest.TestCase):
     def test_rankOfHand(self):
         playerHands = "Black: 2H 3D 5S 9C KD  White: 2C 2H 4S 8C AH"
         handRank = rankOfHand(playerHands)
-        self.assertEqual(handRank, "White wins")
+        self.assertEqual(handRank, "White wins. - with PAIR")
+
+    def test_rankOfHand_FULL_HOUSE(self):
+        playerHands = "Black: 2H 4S 4C 2D 4H  White: 2S 8S AS QS 3S"
+        handRank = rankOfHand(playerHands)
+        self.assertEqual(handRank, "Black wins. - with FULL_HOUSE")
+
+    def test_rankOfHand_HIGH_CARD(self):
+        playerHands = "Black: 2H 3D 5S 9C KD  White: 2C 3H 4S 5C 6H"
+        handRank = rankOfHand(playerHands)
+        self.assertEqual(handRank, "White wins. - with STRAIGHT")
 
     def test_splitPlayerHandInput(self):
         playerHands = "Black: 2H 3D 5S 9C KD  White: 2C 3H 4S 8C AH"
