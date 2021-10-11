@@ -2,7 +2,7 @@ import unittest
 from pokerKata import Suit, Hand, handOfAKind, parseCard, parseCards, numberOfPairs, handOfAKind, isAStraight, isAFlush, parseHand, rankOfHand, splitPlayerHandInput, specifyWinningHand, tieBreaker
 
 
-class TestStringMethods(unittest.TestCase):
+class TestPokerKata(unittest.TestCase):
 
     # "2H" -> (2, Suit.HEARTS)
     # def test_parseCard(self):
@@ -52,13 +52,13 @@ class TestStringMethods(unittest.TestCase):
         cardStrings = ("3H", "3D", "3S", "8C", "QD")
         parsedHand = parseHand(cardStrings)
         self.assertEqual(
-            parsedHand, {"hand": Hand.THREE_OF_A_KIND, "face": None})
+            parsedHand, {"hand": Hand.THREE_OF_A_KIND, "face": 3})
 
     def test_parseHand_isFourOfAKind(self):
         cardStrings = ("4H", "4D", "3S", "4C", "4S")
         parsedHand = parseHand(cardStrings)
         self.assertEqual(
-            parsedHand, {"hand": Hand.FOUR_OF_A_KIND, "face": None})
+            parsedHand, {"hand": Hand.FOUR_OF_A_KIND, "face": 4})
 
     def test_parseHand_isAStraight(self):
         cardStrings = ("3H", "4D", "5S", "6C", "7D")
@@ -126,6 +126,13 @@ class TestStringMethods(unittest.TestCase):
         isStraight = isAStraight(parsedCards)
         self.assertEqual(isStraight, True)
 
+    def test_isAStraight_WithFourOfAKind(self):
+        parsedCards = [(9, Suit.HEARTS), (9, Suit.DIAMONDS),
+                       (9, Suit.SPADES), (9, Suit.CLUBS),
+                       (13, Suit.DIAMONDS)]
+        isStraight = isAStraight(parsedCards)
+        self.assertEqual(isStraight, False)
+
     def test_isAFlush(self):
         parsedCards = [(4, Suit.DIAMONDS), (5, Suit.DIAMONDS),
                        (6, Suit.DIAMONDS), (7, Suit.DIAMONDS),
@@ -134,25 +141,25 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(isFlush, True)
 
     def test_handOfAKind_isThreeKind(self):
-        parsedCards = [(4, Suit.HEARTS), (4, Suit.DIAMONDS),
-                       (4, Suit.SPADES), (2, Suit.CLUBS),
+        parsedCards = [(3, Suit.HEARTS), (3, Suit.DIAMONDS),
+                       (3, Suit.SPADES), (2, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
         threeKind = handOfAKind(parsedCards)
-        self.assertEqual(threeKind, Hand.THREE_OF_A_KIND)
+        self.assertEqual(threeKind, {"hand": Hand.THREE_OF_A_KIND, "face": 3})
 
     def test_handOfAKind_isFourOfAKind(self):
         parsedCards = [(4, Suit.HEARTS), (4, Suit.DIAMONDS),
                        (4, Suit.SPADES), (4, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
         fourKind = handOfAKind(parsedCards)
-        self.assertEqual(fourKind, Hand.FOUR_OF_A_KIND)
+        self.assertEqual(fourKind, {"hand": Hand.FOUR_OF_A_KIND, "face": 4})
 
     def test_handOfAKind_isFourOfAKind_EvenWhen4IsTheHigherNumber(self):
         parsedCards = [(2, Suit.DIAMONDS),
                        (4, Suit.HEARTS), (4, Suit.DIAMONDS),
                        (4, Suit.SPADES), (4, Suit.CLUBS)]
         fourKind = handOfAKind(parsedCards)
-        self.assertEqual(fourKind, Hand.FOUR_OF_A_KIND)
+        self.assertEqual(fourKind, {"hand": Hand.FOUR_OF_A_KIND, "face": 4})
 
     def test_rankOfHand(self):
         playerHands = "Black: 2H 3D 5S 9C KD  White: 2C 2H 4S 8C AH"
@@ -163,6 +170,12 @@ class TestStringMethods(unittest.TestCase):
         playerHands = "Black: 9H 3D 5S 9C KD  White: 2C 2H 4S 8C AH"
         handRank = rankOfHand(playerHands)
         self.assertEqual(handRank, "Black wins. - with PAIR: 9 over 2")
+
+    def test_rankOfHand_fourOfAKind(self):
+        playerHands = "Black: 9H 9D 9S 9C KD  White: 2C 2H 2S 2C AH"
+        handRank = rankOfHand(playerHands)
+        self.assertEqual(
+            handRank, "Black wins. - with FOUR_OF_A_KIND: 9 over 2")
 
     def test_rankOfHand_FULL_HOUSE(self):
         playerHands = "Black: 2H 4S 4C 2D 4H  White: 2S 8S AS QS 3S"

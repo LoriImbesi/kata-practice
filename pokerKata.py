@@ -44,6 +44,8 @@ def rankOfHand(playerHands):
     handStrings = splitPlayerHandInput(playerHands)
     blackHand = parseHand(handStrings["black"])
     whiteHand = parseHand(handStrings["white"])
+    print(blackHand)
+    print(whiteHand)
     if blackHand["hand"].value == whiteHand["hand"].value:
         return tieBreaker(blackHand["hand"], blackHand["face"], whiteHand["face"])
     elif blackHand["hand"].value > whiteHand["hand"].value:
@@ -54,9 +56,9 @@ def rankOfHand(playerHands):
         return ("White wins. - with " + winningHand)
 
 
-#            1.7. rankOfHand
-#  2. 6. parseHand          -  8. tieBreaker
-#  3.5. numberOfPairs
+#                      1.7. rankOfHand
+#          2. 6. parseHand               -  8. tieBreaker
+#  3.5. numberOfPairs  - handofAKind
 #  4. countOfFaces
 
 def specifyWinningHand(winningHandEnum):
@@ -67,6 +69,10 @@ def specifyWinningHand(winningHandEnum):
 
 
 def tieBreaker(handType, blackHandCard, whiteHandCard):
+
+    print(handType)
+    print(blackHandCard)
+    print(whiteHandCard)
     handRank = specifyWinningHand(handType)
     if blackHandCard > whiteHandCard:
         return ("Black wins. - with " + handRank + ": " + str(blackHandCard) + " over " + str(whiteHandCard))
@@ -84,14 +90,15 @@ def parseHand(cardStrings):
 
     if isFlush == True and isStraight == True:
         return {"hand": Hand.STRAIGHT_FLUSH, "face": None}
-    if threeOrFourOfAKind == Hand.THREE_OF_A_KIND and numOfPairs["numberOfPairs"] == 1:
+    if threeOrFourOfAKind["hand"] == Hand.THREE_OF_A_KIND \
+       and numOfPairs["numberOfPairs"] == 1:
         return {"hand": Hand.FULL_HOUSE, "face": None}
     if isFlush == True:
         return {"hand": Hand.FLUSH, "face": None}
     if isStraight == True:
         return {"hand": Hand.STRAIGHT, "face": None}
-    if threeOrFourOfAKind:
-        return {"hand": threeOrFourOfAKind, "face": None}
+    if threeOrFourOfAKind['hand'] != 0:
+        return threeOrFourOfAKind
     if numOfPairs["numberOfPairs"] == 1:
         return {"hand": Hand.PAIR, "face": numOfPairs["relevantFace"]}
     if numOfPairs["numberOfPairs"] == 2:
@@ -148,13 +155,14 @@ def numberOfPairs(parsedCards):
 
 def handOfAKind(parsedCards):
     faceCounts = countOfFaces(parsedCards)
+    handInformation = {"hand": 0, "face": 0}
     for face in faceCounts:
         if faceCounts[face] == 3:
-            return Hand.THREE_OF_A_KIND
+            return {"hand": Hand.THREE_OF_A_KIND, "face": face}
         elif faceCounts[face] == 4:
-            return Hand.FOUR_OF_A_KIND
+            return {"hand": Hand.FOUR_OF_A_KIND, "face": face}
 
-    return None
+    return handInformation
 
 
 def isAStraight(parsedCards):
