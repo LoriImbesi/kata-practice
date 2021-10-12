@@ -96,7 +96,7 @@ def parseHand(cardStrings):
     if isFlush == True:
         return {"hand": Hand.FLUSH, "face": None}
     if isStraight == True:
-        return {"hand": Hand.STRAIGHT, "face": None}
+        return {"hand": Hand.STRAIGHT, "highCard": isStraight["highCard"]}
     if threeOrFourOfAKind['hand'] != 0:
         return threeOrFourOfAKind
     if numOfPairs["numberOfPairs"] == 1:
@@ -167,17 +167,31 @@ def handOfAKind(parsedCards):
 
 def isAStraight(parsedCards):
     faceCounts = countOfFaces(parsedCards)
-    faces = faceCounts.keys()
-    if max(faces) - min(faces) == 4:
-        return True
+    straightHandInformation = {"hand": 0, "highCard": 0}
+    faces = list(faceCounts.keys())
+    faces.sort()
+    confirmStraight = min(
+        faces) + 1 == faces[1] and max(faces) - min(faces) == 4
+    if confirmStraight == True:
+        for face in faces:
+            return {"hand": Hand.STRAIGHT, "highCard": max(faces)}
+
+    return straightHandInformation
+
+    # if max(faces) - min(faces) == 4:
+    # return True
 
 
 def isAFlush(parsedCards):
     firstSuit = parsedCards[0][1]
-
+    faceCounts = countOfFaces(parsedCards)
+    flushHandInformation = {"hand": 0, "highCard": 0}
+    faces = list(faceCounts.keys())
+    faces.sort()
     for parsedCard in parsedCards:
         suit = parsedCard[1]
         if firstSuit != suit:
             return False
-
-    return True
+    for face in faces:
+        return {"hand": Hand.FLUSH, "highCard": max(faces)}
+    return flushHandInformation

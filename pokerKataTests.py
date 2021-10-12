@@ -31,7 +31,7 @@ class TestPokerKata(unittest.TestCase):
         self.assertEqual(parsedCards[3], (9, Suit.CLUBS))
         self.assertEqual(parsedCards[4], (13, Suit.DIAMONDS))
 
-    # hand strings -> Hand enum
+    # hand strings -> Dict with Hand enum & face value
 
     def test_parseHand_isPair(self):
         cardStrings = ("3H", "3D", "5S", "9C", "KD")
@@ -63,7 +63,7 @@ class TestPokerKata(unittest.TestCase):
     def test_parseHand_isAStraight(self):
         cardStrings = ("3H", "4D", "5S", "6C", "7D")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, {"hand": Hand.STRAIGHT, "face": None})
+        self.assertEqual(parsedHand, {"hand": Hand.STRAIGHT, "highCard": 7})
 
     def test_parseHand_isAFlush(self):
         cardStrings = ("3H", "4H", "9H", "6H", "7H")
@@ -124,21 +124,21 @@ class TestPokerKata(unittest.TestCase):
                        (6, Suit.SPADES), (7, Suit.CLUBS),
                        (8, Suit.DIAMONDS)]
         isStraight = isAStraight(parsedCards)
-        self.assertEqual(isStraight, True)
+        self.assertEqual(isStraight, {"hand": Hand.STRAIGHT, "highCard": 8})
 
     def test_isAStraight_WithFourOfAKind(self):
         parsedCards = [(9, Suit.HEARTS), (9, Suit.DIAMONDS),
                        (9, Suit.SPADES), (9, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
         isStraight = isAStraight(parsedCards)
-        self.assertEqual(isStraight, False)
+        self.assertEqual(isStraight, None)
 
     def test_isAFlush(self):
         parsedCards = [(4, Suit.DIAMONDS), (5, Suit.DIAMONDS),
                        (6, Suit.DIAMONDS), (7, Suit.DIAMONDS),
                        (10, Suit.DIAMONDS)]
         isFlush = isAFlush(parsedCards)
-        self.assertEqual(isFlush, True)
+        self.assertEqual(isFlush, {"hand": Hand.FLUSH, "highCard": 10})
 
     def test_handOfAKind_isThreeKind(self):
         parsedCards = [(3, Suit.HEARTS), (3, Suit.DIAMONDS),
@@ -172,7 +172,7 @@ class TestPokerKata(unittest.TestCase):
         self.assertEqual(handRank, "Black wins. - with PAIR: 9 over 2")
 
     def test_rankOfHand_fourOfAKind(self):
-        playerHands = "Black: 9H 9D 9S 9C KD  White: 2C 2H 2S 2C AH"
+        playerHands = "Black: 9H 9D 9S 9C KD  White: 2C 2H 2S 2D AH"
         handRank = rankOfHand(playerHands)
         self.assertEqual(
             handRank, "Black wins. - with FOUR_OF_A_KIND: 9 over 2")
