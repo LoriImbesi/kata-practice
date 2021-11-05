@@ -88,14 +88,23 @@ def parseHand(cardStrings):
     isStraight = isAStraight(parsedCards)
     isFlush = isAFlush(parsedCards)
 
-    if isFlush == True and isStraight == True:
-        return {"hand": Hand.STRAIGHT_FLUSH, "face": None}
+    handIsFlush = isFlush["hand"] == Hand.FLUSH
+    handIsStraight = isStraight["hand"] == Hand.STRAIGHT
+
+    # if isWhateverHand is tie, detectHighCard
+    # does this logic then get repeated in every hand?
+    # Is there a more efficient way to insert this?
+    # What are the baseline conditions for each hand
+
+    if handIsFlush == True and handIsStraight == True:
+        # if isFlush["hand"] == Hand.FLUSH and isStraight["hand"] == Hand.STRAIGHT:
+        return {"hand": Hand.STRAIGHT_FLUSH, "highCard": isStraight["highCard"]}
     if threeOrFourOfAKind["hand"] == Hand.THREE_OF_A_KIND \
        and numOfPairs["numberOfPairs"] == 1:
         return {"hand": Hand.FULL_HOUSE, "face": None}
-    if isFlush == True:
-        return {"hand": Hand.FLUSH, "face": None}
-    if isStraight == True:
+    if isFlush["hand"] == Hand.FLUSH:
+        return {"hand": Hand.FLUSH, "highCard": isFlush["highCard"]}
+    if isStraight["hand"] == Hand.STRAIGHT:
         return {"hand": Hand.STRAIGHT, "highCard": isStraight["highCard"]}
     if threeOrFourOfAKind['hand'] != 0:
         return threeOrFourOfAKind
@@ -107,9 +116,9 @@ def parseHand(cardStrings):
 
 
 def parseCard(card):
-    faceString = card[0]
+    faceString = card[0:-1]
     face = faceLookup[faceString]
-    suitString = card[1]
+    suitString = card[-1]
     suit = suitLookup[suitString]
     return (face, suit)
 
@@ -173,13 +182,10 @@ def isAStraight(parsedCards):
     confirmStraight = min(
         faces) + 1 == faces[1] and max(faces) - min(faces) == 4
     if confirmStraight == True:
-        for face in faces:
-            return {"hand": Hand.STRAIGHT, "highCard": max(faces)}
+
+        return {"hand": Hand.STRAIGHT, "highCard": max(faces)}
 
     return straightHandInformation
-
-    # if max(faces) - min(faces) == 4:
-    # return True
 
 
 def isAFlush(parsedCards):
@@ -192,6 +198,21 @@ def isAFlush(parsedCards):
         suit = parsedCard[1]
         if firstSuit != suit:
             return False
-    for face in faces:
         return {"hand": Hand.FLUSH, "highCard": max(faces)}
+
     return flushHandInformation
+
+
+def detectHighCard(parsedCards):
+    faceCounts = countOfFaces(parsedCards)
+    faces = list(faceCounts.keys())
+    faces.sort()
+
+    return None
+
+    # Not sure what detectHighCard should return
+    # should it be a dict with "hand" as none?
+    # Then it gets updated in other functions?
+    # How can isAHighCard be used easily?
+    # what's needed where?
+    # parseHand needs simple, flexible structures

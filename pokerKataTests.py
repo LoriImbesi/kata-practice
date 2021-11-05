@@ -1,5 +1,5 @@
 import unittest
-from pokerKata import Suit, Hand, handOfAKind, parseCard, parseCards, numberOfPairs, handOfAKind, isAStraight, isAFlush, parseHand, rankOfHand, splitPlayerHandInput, specifyWinningHand, tieBreaker
+from pokerKata import Suit, Hand, countOfFaces, handOfAKind, parseCard, parseCards, numberOfPairs, handOfAKind, isAStraight, isAFlush, parseHand, rankOfHand, splitPlayerHandInput, specifyWinningHand, tieBreaker, detectHighCard
 
 
 class TestPokerKata(unittest.TestCase):
@@ -21,7 +21,25 @@ class TestPokerKata(unittest.TestCase):
         parsedCard = parseCard(card)
         self.assertEqual(parsedCard, (13, Suit.DIAMONDS))
 
+    def test_parseCard3(self):
+        card = "10D"
+        parsedCard = parseCard(card)
+        self.assertEqual(parsedCard, (10, Suit.DIAMONDS))
+
+    def test_countOfFaces(self):
+        cards = ("2H", "3D")
+        parsedCards = parseCards(cards)
+        countedFaces = countOfFaces(parsedCards)
+        self.assertEqual(countedFaces, {2: 1, 3: 1})
+
+    def test_countOfFaces2(self):
+        cards = ("10H", "10D", "5D")
+        parsedCards = parseCards(cards)
+        countedFaces = countOfFaces(parsedCards)
+        self.assertEqual(countedFaces, {5: 1, 10: 2})
+
     # ("3D", "5S") -> List of tuples [(3, Suit.DIAMONDS),(5, Suit.SPADES)]
+
     def test_parseCards(self):
         cards = ("2H", "3D", "5S", "9C", "KD")
         parsedCards = parseCards(cards)
@@ -68,13 +86,13 @@ class TestPokerKata(unittest.TestCase):
     def test_parseHand_isAFlush(self):
         cardStrings = ("3H", "4H", "9H", "6H", "7H")
         parsedHand = parseHand(cardStrings)
-        self.assertEqual(parsedHand, {"hand": Hand.FLUSH, "face": None})
+        self.assertEqual(parsedHand, {"hand": Hand.FLUSH, "highCard": 9})
 
     def test_parseHand_isAStraightFlush(self):
         cardStrings = ("3H", "4H", "5H", "6H", "7H")
         parsedHand = parseHand(cardStrings)
         self.assertEqual(
-            parsedHand, {"hand": Hand.STRAIGHT_FLUSH, "face": None})
+            parsedHand, {"hand": Hand.STRAIGHT_FLUSH, "highCard": 7})
 
     def test_parseHand_isAFullHouse(self):
         cardStrings = ("3H", "3S", "3C", "JD", "JS")
@@ -160,6 +178,13 @@ class TestPokerKata(unittest.TestCase):
                        (4, Suit.SPADES), (4, Suit.CLUBS)]
         fourKind = handOfAKind(parsedCards)
         self.assertEqual(fourKind, {"hand": Hand.FOUR_OF_A_KIND, "face": 4})
+
+    def test_detectHighCard(self):
+        parsedCards = [(4, Suit.SPADES), (8, Suit.HEARTS),
+                       (6, Suit.DIAMONDS), (7, Suit.DIAMONDS),
+                       (10, Suit.CLUBS)]
+        isHighCard = detectHighCard(parsedCards)
+        self.assertEqual(isHighCard, {"hand": Hand.HIGH_CARD, "highCard": 10})
 
     def test_rankOfHand(self):
         playerHands = "Black: 2H 3D 5S 9C KD  White: 2C 2H 4S 8C AH"
