@@ -1,5 +1,5 @@
 import unittest
-from pokerKata import Suit, Hand, countOfFaces, handOfAKind, parseCard, parseCards, numberOfPairs, handOfAKind, isAStraight, isAFlush, parseHand, rankOfHand, splitPlayerHandInput, specifyWinningHand, tieBreaker, detectHighCard
+from pokerKata import Suit, Hand, countOfFaces, handOfAKind, parseCard, parseHand, numberOfPairs, handOfAKind, isAStraight, isAFlush, findHandType, rankOfHand, splitPlayerHandInput, specifyWinningHand, tieBreaker
 
 
 class TestPokerKata(unittest.TestCase):
@@ -10,6 +10,16 @@ class TestPokerKata(unittest.TestCase):
     #     (face, suit) = parseCard(card)
     #     self.assertEqual(face, 2)
     #     self.assertEqual(suit, Suit.HEARTS)
+
+
+    def test_parseHand(self):
+        cards = ("2H", "3D", "5S", "9C", "KD")
+        resultFromParseHand = parseHand(cards)
+        self.assertEqual(resultFromParseHand[0], (2, Suit.HEARTS))
+        self.assertEqual(resultFromParseHand[1], (3, Suit.DIAMONDS))
+        self.assertEqual(resultFromParseHand[2], (5, Suit.SPADES))
+        self.assertEqual(resultFromParseHand[3], (9, Suit.CLUBS))
+        self.assertEqual(resultFromParseHand[4], (13, Suit.DIAMONDS))
 
     def test_parseCard1(self):
         card = "2H"
@@ -28,163 +38,154 @@ class TestPokerKata(unittest.TestCase):
 
     def test_countOfFaces(self):
         cards = ("2H", "3D")
-        parsedCards = parseCards(cards)
-        countedFaces = countOfFaces(parsedCards)
+        resultFromParseHand = parseHand(cards)
+        countedFaces = countOfFaces(resultFromParseHand)
         self.assertEqual(countedFaces, {2: 1, 3: 1})
 
     def test_countOfFaces2(self):
         cards = ("10H", "10D", "5D")
-        parsedCards = parseCards(cards)
-        countedFaces = countOfFaces(parsedCards)
+        resultFromParseHand = parseHand(cards)
+        countedFaces = countOfFaces(resultFromParseHand)
         self.assertEqual(countedFaces, {5: 1, 10: 2})
 
     # ("3D", "5S") -> List of tuples [(3, Suit.DIAMONDS),(5, Suit.SPADES)]
 
-    def test_parseCards(self):
-        cards = ("2H", "3D", "5S", "9C", "KD")
-        parsedCards = parseCards(cards)
-        self.assertEqual(parsedCards[0], (2, Suit.HEARTS))
-        self.assertEqual(parsedCards[1], (3, Suit.DIAMONDS))
-        self.assertEqual(parsedCards[2], (5, Suit.SPADES))
-        self.assertEqual(parsedCards[3], (9, Suit.CLUBS))
-        self.assertEqual(parsedCards[4], (13, Suit.DIAMONDS))
-
     # hand strings -> Dict with Hand enum & face value
 
-    def test_parseHand_isPair(self):
+    def test_findHandType_isPair(self):
         cardStrings = ("3H", "3D", "5S", "9C", "KD")
-        parsedHand = parseHand(cardStrings)
+        parsedHand = findHandType(cardStrings)
         self.assertEqual(parsedHand, {"hand": Hand.PAIR, "face": 3})
 
-    def test_parseHand_isTwoPair(self):
+    def test_findHandType_isTwoPair(self):
         cardStrings = ("3H", "3D", "9S", "9C", "KD")
-        parsedHand = parseHand(cardStrings)
+        parsedHand = findHandType(cardStrings)
         self.assertEqual(parsedHand, {"hand": Hand.TWO_PAIR, "face": None})
 
-    def test_parseHand_isHighCard(self):
+    def test_findHandType_isHighCard(self):
         cardStrings = ("2H", "3D", "9S", "8C", "QD")
-        parsedHand = parseHand(cardStrings)
+        parsedHand = findHandType(cardStrings)
         self.assertEqual(parsedHand, {"hand": Hand.HIGH_CARD, "face": None})
 
-    def test_parseHand_isThreeOfAKind(self):
+    def test_findHandType_isThreeOfAKind(self):
         cardStrings = ("3H", "3D", "3S", "8C", "QD")
-        parsedHand = parseHand(cardStrings)
+        parsedHand = findHandType(cardStrings)
         self.assertEqual(
             parsedHand, {"hand": Hand.THREE_OF_A_KIND, "face": 3})
 
-    def test_parseHand_isFourOfAKind(self):
+    def test_findHandType_isFourOfAKind(self):
         cardStrings = ("4H", "4D", "3S", "4C", "4S")
-        parsedHand = parseHand(cardStrings)
+        parsedHand = findHandType(cardStrings)
         self.assertEqual(
             parsedHand, {"hand": Hand.FOUR_OF_A_KIND, "face": 4})
 
-    def test_parseHand_isAStraight(self):
+    def test_findHandType_isAStraight(self):
         cardStrings = ("3H", "4D", "5S", "6C", "7D")
-        parsedHand = parseHand(cardStrings)
+        parsedHand = findHandType(cardStrings)
         self.assertEqual(parsedHand, {"hand": Hand.STRAIGHT, "highCard": 7})
 
-    def test_parseHand_isAFlush(self):
+    def test_findHandType_isAFlush(self):
         cardStrings = ("3H", "4H", "9H", "6H", "7H")
-        parsedHand = parseHand(cardStrings)
+        parsedHand = findHandType(cardStrings)
         self.assertEqual(parsedHand, {"hand": Hand.FLUSH, "highCard": 9})
 
-    def test_parseHand_isAStraightFlush(self):
+    def test_findHandType_isAStraightFlush(self):
         cardStrings = ("3H", "4H", "5H", "6H", "7H")
-        parsedHand = parseHand(cardStrings)
+        parsedHand = findHandType(cardStrings)
         self.assertEqual(
             parsedHand, {"hand": Hand.STRAIGHT_FLUSH, "highCard": 7})
 
-    def test_parseHand_isAFullHouse(self):
+    def test_findHandType_isAFullHouse(self):
         cardStrings = ("3H", "3S", "3C", "JD", "JS")
-        parsedHand = parseHand(cardStrings)
+        parsedHand = findHandType(cardStrings)
         self.assertEqual(parsedHand, {"hand": Hand.FULL_HOUSE, "face": None})
 
     # List of tuples -> Integer
 
     def test_numberOfPairs_onePair(self):
-        parsedCards = [(4, Suit.HEARTS), (3, Suit.DIAMONDS),
+        parseHand = [(4, Suit.HEARTS), (3, Suit.DIAMONDS),
                        (3, Suit.SPADES), (9, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
-        detectPair = numberOfPairs(parsedCards)
+        detectPair = numberOfPairs(parseHand)
         self.assertEqual(detectPair, {"numberOfPairs": 1, "relevantFace": 3})
 
     def test_numberOfPairs_onePairWithThreeOfAKind(self):
-        parsedCards = [(3, Suit.HEARTS), (3, Suit.CLUBS),
+        parseHand = [(3, Suit.HEARTS), (3, Suit.CLUBS),
                        (3, Suit.SPADES), (11, Suit.DIAMONDS),
                        (11, Suit.SPADES)]
-        detectPair = numberOfPairs(parsedCards)
+        detectPair = numberOfPairs(parseHand)
         self.assertEqual(detectPair, {"numberOfPairs": 1, "relevantFace": 11})
 
     def test_numberOfPairs_twoPair(self):
-        parsedCards = [(9, Suit.HEARTS), (3, Suit.DIAMONDS),
+        parseHand = [(9, Suit.HEARTS), (3, Suit.DIAMONDS),
                        (3, Suit.SPADES), (9, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
-        detectPair = numberOfPairs(parsedCards)
+        detectPair = numberOfPairs(parseHand)
         self.assertEqual(detectPair, {"numberOfPairs": 2, "relevantFace": 0})
 
     def test_numberOfPairs_highCardFindsNoPairs(self):
-        parsedCards = [(2, Suit.HEARTS), (3, Suit.DIAMONDS),
+        parseHand = [(2, Suit.HEARTS), (3, Suit.DIAMONDS),
                        (5, Suit.SPADES), (9, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
-        detectPair = numberOfPairs(parsedCards)
+        detectPair = numberOfPairs(parseHand)
         self.assertEqual(detectPair, {"numberOfPairs": 0, "relevantFace": 0})
 
     def test_numberOfPairs_fourOfAKindDoesntCountAsAPair(self):
-        parsedCards = [(2, Suit.HEARTS), (2, Suit.DIAMONDS),
+        parseHand = [(2, Suit.HEARTS), (2, Suit.DIAMONDS),
                        (2, Suit.SPADES), (2, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
-        detectPair = numberOfPairs(parsedCards)
+        detectPair = numberOfPairs(parseHand)
         self.assertEqual(detectPair, {"numberOfPairs": 0, "relevantFace": 0})
 
 # List of tuples -> Bool
     def test_isAStraight(self):
-        parsedCards = [(4, Suit.HEARTS), (5, Suit.DIAMONDS),
+        parseHand = [(4, Suit.HEARTS), (5, Suit.DIAMONDS),
                        (6, Suit.SPADES), (7, Suit.CLUBS),
                        (8, Suit.DIAMONDS)]
-        isStraight = isAStraight(parsedCards)
+        isStraight = isAStraight(parseHand)
         self.assertEqual(isStraight, {"hand": Hand.STRAIGHT, "highCard": 8})
 
     def test_isAStraight_WithFourOfAKind(self):
-        parsedCards = [(9, Suit.HEARTS), (9, Suit.DIAMONDS),
+        parseHand = [(9, Suit.HEARTS), (9, Suit.DIAMONDS),
                        (9, Suit.SPADES), (9, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
-        isStraight = isAStraight(parsedCards)
+        isStraight = isAStraight(parseHand)
         self.assertEqual(isStraight, None)
 
-    def test_isAFlush(self):
-        parsedCards = [(4, Suit.DIAMONDS), (5, Suit.DIAMONDS),
+    def test_isAFlush0(self):
+        parseHand = [(4, Suit.DIAMONDS), (5, Suit.DIAMONDS),
                        (6, Suit.DIAMONDS), (7, Suit.DIAMONDS),
                        (10, Suit.DIAMONDS)]
-        isFlush = isAFlush(parsedCards)
+        isFlush = isAFlush(parseHand)
         self.assertEqual(isFlush, {"hand": Hand.FLUSH, "highCard": 10})
 
+    def test_isAFlush1(self):
+        parseHand = [(4, Suit.HEARTS), (5, Suit.DIAMONDS),
+                       (6, Suit.DIAMONDS), (7, Suit.DIAMONDS),
+                       (10, Suit.DIAMONDS)]
+        isFlush = isAFlush(parseHand)
+        self.assertEqual(isFlush, False)
+
     def test_handOfAKind_isThreeKind(self):
-        parsedCards = [(3, Suit.HEARTS), (3, Suit.DIAMONDS),
+        parseHand = [(3, Suit.HEARTS), (3, Suit.DIAMONDS),
                        (3, Suit.SPADES), (2, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
-        threeKind = handOfAKind(parsedCards)
+        threeKind = handOfAKind(parseHand)
         self.assertEqual(threeKind, {"hand": Hand.THREE_OF_A_KIND, "face": 3})
 
     def test_handOfAKind_isFourOfAKind(self):
-        parsedCards = [(4, Suit.HEARTS), (4, Suit.DIAMONDS),
+        parseHand = [(4, Suit.HEARTS), (4, Suit.DIAMONDS),
                        (4, Suit.SPADES), (4, Suit.CLUBS),
                        (13, Suit.DIAMONDS)]
-        fourKind = handOfAKind(parsedCards)
+        fourKind = handOfAKind(parseHand)
         self.assertEqual(fourKind, {"hand": Hand.FOUR_OF_A_KIND, "face": 4})
 
     def test_handOfAKind_isFourOfAKind_EvenWhen4IsTheHigherNumber(self):
-        parsedCards = [(2, Suit.DIAMONDS),
+        parseHand = [(2, Suit.DIAMONDS),
                        (4, Suit.HEARTS), (4, Suit.DIAMONDS),
                        (4, Suit.SPADES), (4, Suit.CLUBS)]
-        fourKind = handOfAKind(parsedCards)
+        fourKind = handOfAKind(parseHand)
         self.assertEqual(fourKind, {"hand": Hand.FOUR_OF_A_KIND, "face": 4})
-
-    def test_detectHighCard(self):
-        parsedCards = [(4, Suit.SPADES), (8, Suit.HEARTS),
-                       (6, Suit.DIAMONDS), (7, Suit.DIAMONDS),
-                       (10, Suit.CLUBS)]
-        isHighCard = detectHighCard(parsedCards)
-        self.assertEqual(isHighCard, {"hand": Hand.HIGH_CARD, "highCard": 10})
 
     def test_rankOfHand(self):
         playerHands = "Black: 2H 3D 5S 9C KD  White: 2C 2H 4S 8C AH"

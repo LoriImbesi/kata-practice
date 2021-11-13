@@ -42,8 +42,8 @@ def splitPlayerHandInput(playerHands):
 
 def rankOfHand(playerHands):
     handStrings = splitPlayerHandInput(playerHands)
-    blackHand = parseHand(handStrings["black"])
-    whiteHand = parseHand(handStrings["white"])
+    blackHand = findHandType(handStrings["black"])
+    whiteHand = findHandType(handStrings["white"])
     print(blackHand)
     print(whiteHand)
     if blackHand["hand"].value == whiteHand["hand"].value:
@@ -57,9 +57,14 @@ def rankOfHand(playerHands):
 
 
 #                      1.7. rankOfHand
-#          2. 6. parseHand               -  8. tieBreaker
+#          2. 6. findHandType()               -  8. tieBreaker
 #  3.5. numberOfPairs  - handofAKind
 #  4. countOfFaces
+
+# if isWhateverHand is tie, detectHighCard
+# does this logic then get repeated in every hand?
+# Is there a more efficient way to insert this?
+# What are the baseline conditions for each hand
 
 def specifyWinningHand(winningHandEnum):
     winningHand = str(winningHandEnum)
@@ -80,8 +85,8 @@ def tieBreaker(handType, blackHandCard, whiteHandCard):
         return ("White wins. - with " + handRank + ": " + str(whiteHandCard) + " over " + str(blackHandCard))
 
 
-def parseHand(cardStrings):
-    parsedCards = parseCards(cardStrings)
+def findHandType(cardStrings):
+    parsedCards = parseHand(cardStrings)
     numOfPairs = numberOfPairs(parsedCards)
 
     threeOrFourOfAKind = handOfAKind(parsedCards)
@@ -89,12 +94,7 @@ def parseHand(cardStrings):
     isFlush = isAFlush(parsedCards)
 
     handIsFlush = isFlush["hand"] == Hand.FLUSH
-    handIsStraight = isStraight["hand"] == Hand.STRAIGHT
-
-    # if isWhateverHand is tie, detectHighCard
-    # does this logic then get repeated in every hand?
-    # Is there a more efficient way to insert this?
-    # What are the baseline conditions for each hand
+    handIsStraight = isStraight["hand"] == Hand.STRAIGHT   
 
     if handIsFlush == True and handIsStraight == True:
         # if isFlush["hand"] == Hand.FLUSH and isStraight["hand"] == Hand.STRAIGHT:
@@ -123,7 +123,7 @@ def parseCard(card):
     return (face, suit)
 
 
-def parseCards(cardStrings):
+def parseHand(cardStrings):
     parsedCardList = []
     for cardString in cardStrings:
         parsedCards = parseCard(cardString)
@@ -190,29 +190,31 @@ def isAStraight(parsedCards):
 
 def isAFlush(parsedCards):
     firstSuit = parsedCards[0][1]
+    print(firstSuit)
     faceCounts = countOfFaces(parsedCards)
-    flushHandInformation = {"hand": 0, "highCard": 0}
     faces = list(faceCounts.keys())
     faces.sort()
     for parsedCard in parsedCards:
         suit = parsedCard[1]
+        print(parsedCard)
         if firstSuit != suit:
-            return False
-        return {"hand": Hand.FLUSH, "highCard": max(faces)}
+            print("ham")
+            # return False
+        # else : 
+        #     return {"hand": Hand.FLUSH, "highCard": max(faces)}
 
-    return flushHandInformation
-
-
-def detectHighCard(parsedCards):
-    faceCounts = countOfFaces(parsedCards)
-    faces = list(faceCounts.keys())
-    faces.sort()
-
-    return None
+    # Suit.HEARTS == <Suit.HEARTS : 1>
 
     # Not sure what detectHighCard should return
     # should it be a dict with "hand" as none?
     # Then it gets updated in other functions?
     # How can isAHighCard be used easily?
     # what's needed where?
-    # parseHand needs simple, flexible structures
+    # findHandType() needs simple, flexible structures
+
+    # truthiness diagram:
+    # True, data, {key: 0, value: 1}, [1, 5, "stuff"], "ham", 5 === truthy
+    # False, none {}, [], 0 === falsey
+
+    # Test isAFlush1 failing, line 200 isn't hitting, all of the tuples are comparing
+    # identically, but we do not know why. Something going wrong with datatype? Enum?
