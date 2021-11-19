@@ -44,8 +44,8 @@ def rankOfHand(playerHands):
     handStrings = splitPlayerHandInput(playerHands)
     blackHand = findHandType(handStrings["black"])
     whiteHand = findHandType(handStrings["white"])
-    print(blackHand)
-    print(whiteHand)
+    # print(blackHand)
+    # print(whiteHand)
     if blackHand["hand"].value == whiteHand["hand"].value:
         return tieBreaker(blackHand["hand"], blackHand["face"], whiteHand["face"])
     elif blackHand["hand"].value > whiteHand["hand"].value:
@@ -75,9 +75,9 @@ def specifyWinningHand(winningHandEnum):
 
 def tieBreaker(handType, blackHandCard, whiteHandCard):
 
-    print(handType)
-    print(blackHandCard)
-    print(whiteHandCard)
+    # print(handType)
+    # print(blackHandCard)
+    # print(whiteHandCard)
     handRank = specifyWinningHand(handType)
     if blackHandCard > whiteHandCard:
         return ("Black wins. - with " + handRank + ": " + str(blackHandCard) + " over " + str(whiteHandCard))
@@ -176,32 +176,31 @@ def handOfAKind(parsedCards):
 
 def isAStraight(parsedCards):
     faceCounts = countOfFaces(parsedCards)
-    straightHandInformation = {"hand": 0, "highCard": 0}
     faces = list(faceCounts.keys())
     faces.sort()
+    print(faces)
     confirmStraight = min(
         faces) + 1 == faces[1] and max(faces) - min(faces) == 4
     if confirmStraight == True:
-
         return {"hand": Hand.STRAIGHT, "highCard": max(faces)}
-
-    return straightHandInformation
 
 
 def isAFlush(parsedCards):
     firstSuit = parsedCards[0][1]
-    print(firstSuit)
+    for parsedCard in parsedCards:
+        suit = parsedCard[1]
+        if firstSuit != suit:
+            return False
+   
+    return {"hand": Hand.FLUSH, "highCard": detectHighCard(parsedCards)}
+
+
+def detectHighCard(parsedCards):
     faceCounts = countOfFaces(parsedCards)
     faces = list(faceCounts.keys())
     faces.sort()
-    for parsedCard in parsedCards:
-        suit = parsedCard[1]
-        print(parsedCard)
-        if firstSuit != suit:
-            print("ham")
-            # return False
-        # else : 
-        #     return {"hand": Hand.FLUSH, "highCard": max(faces)}
+    return (max(faces))
+
 
     # Suit.HEARTS == <Suit.HEARTS : 1>
 

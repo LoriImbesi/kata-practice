@@ -1,5 +1,5 @@
 import unittest
-from pokerKata import Suit, Hand, countOfFaces, handOfAKind, parseCard, parseHand, numberOfPairs, handOfAKind, isAStraight, isAFlush, findHandType, rankOfHand, splitPlayerHandInput, specifyWinningHand, tieBreaker
+from pokerKata import Suit, Hand, countOfFaces, handOfAKind, parseCard, parseHand, numberOfPairs, handOfAKind, isAStraight, isAFlush, findHandType, rankOfHand, splitPlayerHandInput, specifyWinningHand, tieBreaker, detectHighCard
 
 
 class TestPokerKata(unittest.TestCase):
@@ -165,6 +165,14 @@ class TestPokerKata(unittest.TestCase):
                        (10, Suit.DIAMONDS)]
         isFlush = isAFlush(parseHand)
         self.assertEqual(isFlush, False)
+
+    def test_detectHighCard0(self):
+        parsedCards = [(3, Suit.HEARTS), (5, Suit.SPADES), (10, Suit.DIAMONDS)]
+        self.assertEqual(detectHighCard(parsedCards), 10)
+
+    def test_detectHighCard1(self):
+        parsedCards = [(11, Suit.HEARTS), (12, Suit.SPADES), (14, Suit.DIAMONDS)]
+        self.assertEqual(detectHighCard(parsedCards), 14)
 
     def test_handOfAKind_isThreeKind(self):
         parseHand = [(3, Suit.HEARTS), (3, Suit.DIAMONDS),
