@@ -21,6 +21,11 @@ class TestPokerKata(unittest.TestCase):
         self.assertEqual(resultFromParseHand[3], (9, Suit.CLUBS))
         self.assertEqual(resultFromParseHand[4], (13, Suit.DIAMONDS))
 
+    def test_parseHand1(self):
+        cards = ("2H", "2C")
+        resultFromParseHand1 = parseHand(cards)
+        self.assertEqual(resultFromParseHand1, [(2, Suit.HEARTS), (2, Suit.CLUBS)])
+
     def test_parseCard1(self):
         card = "2H"
         parsedCard = parseCard(card)

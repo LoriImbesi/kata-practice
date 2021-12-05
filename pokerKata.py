@@ -88,24 +88,17 @@ def tieBreaker(handType, blackHandCard, whiteHandCard):
 def findHandType(cardStrings):
     parsedCards = parseHand(cardStrings)
     numOfPairs = numberOfPairs(parsedCards)
-
     threeOrFourOfAKind = handOfAKind(parsedCards)
-    isStraight = isAStraight(parsedCards)
-    isFlush = isAFlush(parsedCards)
-
-    handIsFlush = isFlush["hand"] == Hand.FLUSH
-    handIsStraight = isStraight["hand"] == Hand.STRAIGHT   
-
-    if handIsFlush == True and handIsStraight == True:
-        # if isFlush["hand"] == Hand.FLUSH and isStraight["hand"] == Hand.STRAIGHT:
-        return {"hand": Hand.STRAIGHT_FLUSH, "highCard": isStraight["highCard"]}
+    # [(2, Suit.HEARTS), (2, Suit.CLUBS)]
+    # if isAFlush(parsedCards) == True and isAStraight(parsedCards) == True:
+        # return {"hand": Hand.STRAIGHT_FLUSH, "highCard": isAStraight(parsedCards)["highCard"]}
     if threeOrFourOfAKind["hand"] == Hand.THREE_OF_A_KIND \
        and numOfPairs["numberOfPairs"] == 1:
         return {"hand": Hand.FULL_HOUSE, "face": None}
-    if isFlush["hand"] == Hand.FLUSH:
-        return {"hand": Hand.FLUSH, "highCard": isFlush["highCard"]}
-    if isStraight["hand"] == Hand.STRAIGHT:
-        return {"hand": Hand.STRAIGHT, "highCard": isStraight["highCard"]}
+    if isAFlush(parsedCards):
+        return {"hand": Hand.FLUSH, "highCard": isAFlush(parsedCards)["highCard"]}
+    if isAStraight(parsedCards):
+        return {"hand": Hand.STRAIGHT, "highCard": isAStraight(parsedCards)["highCard"]}
     if threeOrFourOfAKind['hand'] != 0:
         return threeOrFourOfAKind
     if numOfPairs["numberOfPairs"] == 1:
@@ -217,3 +210,5 @@ def detectHighCard(parsedCards):
 
     # Test isAFlush1 failing, line 200 isn't hitting, all of the tuples are comparing
     # identically, but we do not know why. Something going wrong with datatype? Enum?
+
+    # Tesing a single test: TestPokerKata.test_findHandType_isPair
