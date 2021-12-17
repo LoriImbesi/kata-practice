@@ -90,8 +90,8 @@ def findHandType(cardStrings):
     numOfPairs = numberOfPairs(parsedCards)
     threeOrFourOfAKind = handOfAKind(parsedCards)
     # [(2, Suit.HEARTS), (2, Suit.CLUBS)]
-    # if isAFlush(parsedCards) == True and isAStraight(parsedCards) == True:
-        # return {"hand": Hand.STRAIGHT_FLUSH, "highCard": isAStraight(parsedCards)["highCard"]}
+    if isAFlush(parsedCards) and isAStraight(parsedCards):
+        return {"hand": Hand.STRAIGHT_FLUSH, "highCard": isAStraight(parsedCards)["highCard"]}
     if threeOrFourOfAKind["hand"] == Hand.THREE_OF_A_KIND \
        and numOfPairs["numberOfPairs"] == 1:
         return {"hand": Hand.FULL_HOUSE, "face": None}
