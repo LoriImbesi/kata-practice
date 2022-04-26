@@ -4,41 +4,51 @@ romanNumsToArabic = {"I": 1, "V": 5, "X": 10,
                      "L": 50, "C": 100, "D": 500, "M": 1000}
 
 
-def romanToArabic():
-    return 0
+def returnString(string):
+    return string[1:len(string)]
+
+def addArrayOfNumbers(numbers): # giving function name and param
+    sum = 0                 # assigning 0 to the variable "sum"
+    for num in numbers:     # for loop for each value/element in numbers
+        sum += num          # redefines sum plus the value of num in each loop
+    return sum              # return the value of sum
 
 
-def arabicToRoman(arabicNumber):
-    romanNumeral = ""
+# def romanToArabic():
+#     return 0
 
-    while arabicNumber > 0:
-        if arabicNumber < 4:
-            romanNumeral += arabicToRomanNums[1]
-            arabicNumber -= 1
-        elif arabicNumber == 4:
-            romanNumeral += arabicToRomanNums[1]
-            romanNumeral += arabicToRomanNums[5]
-            arabicNumber -= 4
-        elif arabicNumber < 9:
-            romanNumeral = arabicToRomanNums[5]
-            arabicNumber -= 5
-        elif arabicNumber == 9:
-            romanNumeral += arabicToRomanNums[1]
-            romanNumeral += arabicToRomanNums[10]
-            arabicNumber -= 9
-        elif arabicNumber < 50:
-            romanNumeral = arabicToRomanNums[10]
-            arabicNumber -= 10
-        elif arabicNumber < 100:
-            romanNumeral = arabicToRomanNums[50]
-            arabicNumber -= 50
-        elif arabicNumber < 500:
-            romanNumeral = arabicToRomanNums[100]
-            arabicNumber -= 100
-        elif arabicNumber < 1000:
-            romanNumeral = arabicToRomanNums[500]
-            arabicNumber -= 500
-        elif arabicNumber < 3000:
-            romanNumeral = arabicToRomanNums[1000]
-            arabicNumber -= 1000
-    return romanNumeral
+
+# def arabicToRoman(arabicNumber):
+#     romanNumeral = ""
+
+#     while arabicNumber > 0:
+#         if arabicNumber < 4:
+#             romanNumeral += arabicToRomanNums[1]
+#             arabicNumber -= 1
+#         elif arabicNumber == 4:
+#             romanNumeral += arabicToRomanNums[1]
+#             romanNumeral += arabicToRomanNums[5]
+#             arabicNumber -= 4
+#         elif arabicNumber < 9:
+#             romanNumeral = arabicToRomanNums[5]
+#             arabicNumber -= 5
+#         elif arabicNumber == 9:
+#             romanNumeral += arabicToRomanNums[1]
+#             romanNumeral += arabicToRomanNums[10]
+#             arabicNumber -= 9
+#         elif arabicNumber < 50:
+#             romanNumeral = arabicToRomanNums[10]
+#             arabicNumber -= 10
+#         elif arabicNumber < 100:
+#             romanNumeral = arabicToRomanNums[50]
+#             arabicNumber -= 50
+#         elif arabicNumber < 500:
+#             romanNumeral = arabicToRomanNums[100]
+#             arabicNumber -= 100
+#         elif arabicNumber < 1000:
+#             romanNumeral = arabicToRomanNums[500]
+#             arabicNumber -= 500
+#         elif arabicNumber < 3000:
+#             romanNumeral = arabicToRomanNums[1000]
+#             arabicNumber -= 1000
+#     return romanNumeral
